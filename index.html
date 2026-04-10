@@ -3,76 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P + G Forever</title>
+    <title>P+G on Graph Paper</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #fff5f5;
+            background-color: #f0f0f0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .container {
-            width: 80%;
-            max-width: 600px;
+
+        /* Essential for maintaining a square aspect ratio */
+        .chart-container {
             position: relative;
+            width: 80vw;   /* Width is 80% of viewport width */
+            max-width: 600px; /* But capped at 600px */
+            /* This is the magic line to make it always square based on width */
+            aspect-ratio: 1 / 1; 
+            background-color: white; /* Give it a clean white "paper" background */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        .label-overlay {
+
+        /* Force canvas to fit the container */
+        canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Position the text perfectly in the visual center */
+        .centered-label {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: bold;
             color: #d63384;
-            pointer-events: none; /* Allows clicks to pass through to the chart */
+            pointer-events: none;
+            z-index: 10; /* Ensure it's above the grid but below any interactive stuff */
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="chart-container">
         <canvas id="heartChart"></canvas>
-        <div class="label-overlay">Pramangsu + Gaytri</div>
+        <div class="centered-label">P+G</div>
     </div>
 
     <script>
         const ctx = document.getElementById('heartChart').getContext('2d');
         
-        // Generate data points for the heart
-        const dataPoints = [];
-        for (let t = 0; t <= 2 * Math.PI; t += 0.01) {
+        // --- 1. Generate Heart Data Points (same formula) ---
+        const heartPoints = [];
+        for (let t = 0; t <= 2 * Math.PI; t += 0.005) { // More points for a smoother curve
             const x = 16 * Math.pow(Math.sin(t), 3);
             const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-            dataPoints.push({x: x, y: y});
+            heartPoints.push({x: x, y: y});
         }
 
+        // --- 2. Create the Chart ---
         new Chart(ctx, {
             type: 'scatter',
             data: {
                 datasets: [{
-                    label: 'Love Equation',
-                    data: dataPoints,
+                    data: heartPoints,
                     showLine: true,
-                    borderColor: '#ff4d6d',
-                    backgroundColor: 'rgba(255, 77, 109, 0.2)',
+                    borderColor: '#ff003c', // A punchier pink/red
+                    backgroundColor: 'rgba(255, 0, 60, 0.15)', // Shaded area
                     borderWidth: 3,
-                    pointRadius: 0, // Hides the individual dots for a smooth line
+                    pointRadius: 0,
                     fill: true
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true, // Crucial for square aspect ratio
+                
+                // Axis settings to create the grid look
                 scales: {
-                    x: { display: false }, // Hides the grid lines
-                    y: { display: false }
+                    x: {
+                        type: 'linear',
+                        // Set specific, square limits to make the grid even
+                        min: -20, 
+                        max: 20,
+                        ticks: {
+                            stepSize: 10, // Show labels at -10, 0, 10, 20
+                            color: '#666'
+                        },
+                        grid: {
+                            display: true,
+                            color: '#ddd', // Make grid lines soft gray
+                            lineWidth: 0.5,
+                            drawBorder: true,
+                            // Ensure the major axis lines (at 0) are drawn
+                            drawOnChartArea: true,
+                            drawTicks: true
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        // Match limits with X for perfect square aspect
+                        min: -20,
+                        max: 20,
+                        ticks: {
+                            stepSize: 10,
+                            color: '#666'
+                        },
+                        grid: {
+                            display: true,
+                            color: '#ddd',
+                            lineWidth: 0.5,
+                            drawBorder: true,
+                            drawOnChartArea: true,
+                            drawTicks: true
+                        }
+                    }
                 },
+                
                 plugins: {
-                    legend: { display: false }
+                    legend: { display: false },
+                    tooltip: { enabled: false }
                 }
             }
         });
