@@ -3,99 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pramangsu + Arjun</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap" rel="stylesheet">
+    <title>P + A</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap" rel="stylesheet">
     <style>
-        body, html {
+        body {
             margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #ffffff;
-            /* STEP 1: Create the Graph Paper background */
-            background-image: 
-                linear-gradient(#e5e5e5 1px, transparent 1px),
-                linear-gradient(90deg, #e5e5e5 1px, transparent 1px);
-            background-size: 30px 30px; /* Size of the grid squares */
+            height: 100vh;
+            background-color: #000; /* Black background around the image */
             font-family: 'Poppins', sans-serif;
         }
 
-        .graph-container {
+        .container {
             position: relative;
-            width: 90vw;
-            max-width: 500px;
-            aspect-ratio: 1/1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* STEP 2: The Heart Shape (SVG) */
-        .heart-svg {
             width: 100%;
-            height: 100%;
-            drop-shadow: 0 0 10px rgba(255, 0, 100, 0.2);
+            max-width: 600px; /* Adjust this to make the image bigger/smaller */
+            line-height: 0;
         }
 
-        .heart-path {
-            fill: rgba(255, 20, 147, 0.05); /* Light pink fill */
-            stroke: #ff1493; /* Deep Pink border */
-            stroke-width: 2;
-            stroke-linecap: round;
+        /* This displays the actual image you uploaded */
+        .background-image {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
-        /* STEP 3: The Names (Adjustable and Centered) */
         .text-overlay {
             position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-            top: 45%; /* Centers it inside the "bulge" of the heart */
+            line-height: 1.2;
         }
 
         .name {
-            font-size: 2.5rem;
-            color: #c2185b;
+            font-size: clamp(2rem, 8vw, 4rem);
+            color: #d63384; /* Pinkish color */
             margin: 0;
-            padding: 0;
             text-transform: uppercase;
-            line-height: 1;
         }
 
         .plus {
-            font-size: 2rem;
-            color: #ff1493;
+            font-size: clamp(1.5rem, 6vw, 3rem);
+            color: #ff4d6d;
+            display: block;
             margin: 5px 0;
-        }
-
-        /* Extra: A slight "heartbeat" animation */
-        .graph-container {
-            animation: beat 1.5s infinite ease-in-out;
-        }
-
-        @keyframes beat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
     </style>
 </head>
 <body>
 
-    <div class="graph-container">
-        <svg class="heart-svg" viewBox="0 0 100 100">
-            <path class="heart-path" d="M 50,35 
-                A 20,20 0,0,0 15,50 
-                C 15,80 50,100 50,100 
-                C 50,100 85,80 85,50 
-                A 20,20 0,0,0 50,35 Z" />
-        </svg>
+    <div class="container">
+        <img src="graph.jpg" alt="Graph Background" class="background-image">
 
         <div class="text-overlay">
             <div class="name">Pramangsu</div>
