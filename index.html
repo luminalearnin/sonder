@@ -3,63 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pramangsu + Gayatri</title>
+    <title>Pramangsu + Arjun</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* 1. Basic Setup */
+        :root {
+            --grid-color: #e0e0e0;
+            --heart-color: #ff4d6d;
+            --text-color: #c9184a;
+        }
+
         body {
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Takes full viewport height */
-            margin: 0;
-            background-color: #fff8f8; /* Soft pinkish-white background */
-            overflow: hidden; /* Optional: hides scrollbars for a clean look */
-            font-family: 'Poppins', sans-serif; /* Use a modern, romantic font (see below) */
+            height: 100vh;
+            background-color: #fafafa;
+            /* This creates the graph paper effect background */
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* 2. Style the SVG Container */
-        .svg-container {
-            width: 80vw; /* Takes 80% of viewport width */
-            max-width: 800px; /* Capped at 800px width so it doesn't get crazy on huge monitors */
-            aspect-ratio: 1 / 1; /* Maintains a perfect square aspect ratio */
+        .container {
+            width: 90vw;
+            max-width: 600px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
         }
 
-        /* 3. Style the heart shape itself */
+        /* The Heart Shape */
+        svg {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 15px rgba(255, 77, 109, 0.3));
+        }
+
         .heart-path {
-            fill: none; /* Make it transparent inside */
-            stroke: #d63384; /* Deep, rich pink color */
-            stroke-width: 1.5; /* Line thickness */
+            fill: rgba(255, 77, 109, 0.05);
+            stroke: var(--heart-color);
+            stroke-width: 1.5;
+            stroke-linecap: round;
         }
 
-        /* 4. Style the text within the SVG */
-        .heart-text {
-            fill: #c2185b; /* A darker, punchier text color */
-            font-size: 8px; /* Standard text size (relative to the SVG viewbox, not the screen) */
-            font-weight: bold;
-            text-anchor: middle; /* Centers each line of text relative to its X coordinate */
+        /* The Centered Names */
+        .names {
+            position: absolute;
+            top: 45%; /* Adjusted for visual center of the heart */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .names p {
+            margin: 0;
+            padding: 0;
+            font-size: clamp(1.5rem, 5vw, 3rem); /* Responsive text size */
+            color: var(--text-color);
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .plus-sign {
+            font-size: 2rem;
+            display: block;
+            margin: 10px 0;
+        }
+
+        /* Subtle floating animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="svg-container">
+    <div class="container">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            
-            <path class="heart-path" d="M 50,20
-                  A 20,20 0,0,0 20,40
-                  Q 20,60 50,90
-                  Q 80,60 80,40
-                  A 20,20 0,0,0 50,20 Z" />
-
-            <text x="50" y="50" class="heart-text">
-                <tspan x="50" dy="-11">Pramangsu</tspan>
-                <tspan x="50" dy="11">+</tspan>
-                <tspan x="50" dy="11">Gayatri</tspan>
-            </text>
+            <path class="heart-path" d="M 50,30 
+                  A 20,20 0,0,0 10,50 
+                  C 10,80 50,100 50,100 
+                  C 50,100 90,80 90,50 
+                  A 20,20 0,0,0 50,30 Z" />
         </svg>
+
+        <div class="names">
+            <p>Pramangsu</p>
+            <span class="plus-sign" style="color: #ff4d6d;">+</span>
+            <p>Arjun</p>
+        </div>
     </div>
 
 </body>
