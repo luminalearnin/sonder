@@ -3,65 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P + A</title>
+    <title>Pramangsu + Arjun</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #000; /* Black background around the image */
+            background-color: #ffffff; /* White background to match the paper */
             font-family: 'Poppins', sans-serif;
         }
 
         .container {
             position: relative;
-            width: 100%;
-            max-width: 600px; /* Adjust this to make the image bigger/smaller */
-            line-height: 0;
+            width: 95vw;
+            max-width: 500px; /* Limits the size so it looks good on desktop too */
         }
 
-        /* This displays the actual image you uploaded */
         .background-image {
             width: 100%;
             height: auto;
             display: block;
+            border-radius: 10px; /* Optional: rounds the corners of your image */
         }
 
         .text-overlay {
             position: absolute;
-            top: 50%;
+            /* This centers the text container exactly in the middle of the image */
+            top: 50%; 
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
             width: 100%;
-            line-height: 1.2;
+            pointer-events: none; /* Makes sure the text doesn't interfere with clicking */
         }
 
         .name {
-            font-size: clamp(2rem, 8vw, 4rem);
-            color: #d63384; /* Pinkish color */
+            font-size: clamp(1.8rem, 7vw, 2.5rem); /* Scales text based on screen size */
+            color: #d63384; /* Deep pink color */
             margin: 0;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
         }
 
         .plus {
-            font-size: clamp(1.5rem, 6vw, 3rem);
+            font-size: 1.8rem;
             color: #ff4d6d;
-            display: block;
             margin: 5px 0;
+            display: block;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <img src="1769602656377.png" alt="Graph Background" class="background-image">
+        <img src="1769602656377.png" alt="Graph" class="background-image">
+
         <div class="text-overlay">
             <div class="name">Pramangsu</div>
-            <div class="plus">+</div>
+            <span class="plus">+</span>
             <div class="name">Arjun</div>
         </div>
     </div>
