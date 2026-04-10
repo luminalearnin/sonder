@@ -3,79 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A + S Forever</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Pramangsu + Gayatri</title>
     <style>
+        /* 1. Basic Setup */
         body {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            height: 100vh;
+            align-items: center;
+            min-height: 100vh; /* Takes full viewport height */
             margin: 0;
-            background-color: #fff5f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff8f8; /* Soft pinkish-white background */
+            overflow: hidden; /* Optional: hides scrollbars for a clean look */
+            font-family: 'Poppins', sans-serif; /* Use a modern, romantic font (see below) */
         }
-        .container {
-            width: 80%;
-            max-width: 600px;
-            position: relative;
+
+        /* 2. Style the SVG Container */
+        .svg-container {
+            width: 80vw; /* Takes 80% of viewport width */
+            max-width: 800px; /* Capped at 800px width so it doesn't get crazy on huge monitors */
+            aspect-ratio: 1 / 1; /* Maintains a perfect square aspect ratio */
         }
-        .label-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.5rem;
+
+        /* 3. Style the heart shape itself */
+        .heart-path {
+            fill: none; /* Make it transparent inside */
+            stroke: #d63384; /* Deep, rich pink color */
+            stroke-width: 1.5; /* Line thickness */
+        }
+
+        /* 4. Style the text within the SVG */
+        .heart-text {
+            fill: #c2185b; /* A darker, punchier text color */
+            font-size: 8px; /* Standard text size (relative to the SVG viewbox, not the screen) */
             font-weight: bold;
-            color: #d63384;
-            pointer-events: none; /* Allows clicks to pass through to the chart */
+            text-anchor: middle; /* Centers each line of text relative to its X coordinate */
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="container">
-        <canvas id="heartChart"></canvas>
-        <div class="label-overlay">A + S</div>
+    <div class="svg-container">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            
+            <path class="heart-path" d="M 50,20
+                  A 20,20 0,0,0 20,40
+                  Q 20,60 50,90
+                  Q 80,60 80,40
+                  A 20,20 0,0,0 50,20 Z" />
+
+            <text x="50" y="50" class="heart-text">
+                <tspan x="50" dy="-11">Pramangsu</tspan>
+                <tspan x="50" dy="11">+</tspan>
+                <tspan x="50" dy="11">Gayatri</tspan>
+            </text>
+        </svg>
     </div>
 
-    <script>
-        const ctx = document.getElementById('heartChart').getContext('2d');
-        
-        // Generate data points for the heart
-        const dataPoints = [];
-        for (let t = 0; t <= 2 * Math.PI; t += 0.01) {
-            const x = 16 * Math.pow(Math.sin(t), 3);
-            const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-            dataPoints.push({x: x, y: y});
-        }
-
-        new Chart(ctx, {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Love Equation',
-                    data: dataPoints,
-                    showLine: true,
-                    borderColor: '#ff4d6d',
-                    backgroundColor: 'rgba(255, 77, 109, 0.2)',
-                    borderWidth: 3,
-                    pointRadius: 0, // Hides the individual dots for a smooth line
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: { display: false }, // Hides the grid lines
-                    y: { display: false }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-    </script>
 </body>
 </html>
