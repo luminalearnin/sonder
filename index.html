@@ -31,10 +31,10 @@
             width: 90%;
             max-width: 400px;
             position: relative;
-            min-height: 350px;
+            min-height: 400px;
         }
 
-        h2 { color: #d63384; font-size: 1.4rem; margin-bottom: 20px; line-height: 1.4; }
+        h2 { color: #8e44ad; font-size: 1.5rem; margin-bottom: 20px; line-height: 1.4; }
 
         .image-container img {
             width: 180px;
@@ -62,8 +62,8 @@
             z-index: 100;
         }
 
-        #okBtn { background-color: #ff4d6d; color: white; position: relative; }
-        #noBtn { background-color: #6c757d; color: white; position: absolute; transition: 0.1s ease; }
+        #okBtn { background-color: #9b59b6; color: white; position: relative; }
+        #noBtn { background-color: #95a5a6; color: white; position: absolute; transition: 0.1s ease; }
 
         .hidden { display: none; }
     </style>
@@ -78,7 +78,7 @@
                 <img src="https://media.tenor.com/On7V4_S3m_IAAAAC/cat-stick-up.gif" alt="Gun Cat">
             </div>
             <div class="btn-group">
-                <button id="okBtn" onclick="nextScreen()">Ok</button>
+                <button id="okBtn" onclick="nextScreen(2)">Ok</button>
                 <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
             </div>
         </div>
@@ -86,9 +86,17 @@
         <div id="screen2" class="card hidden">
             <h2>Please na... Ahaa 🥺 appa appa</h2>
             <div class="image-container">
-                <img src="https://media.tenor.com/XAS-pY-q694AAAAM/mochi-peach.gif" alt="Please">
+                <img src="https://media.tenor.com/XAS-pY-q694AAAAM/mochi-peach.gif" alt="Sad Cat">
             </div>
-            <button id="okBtn" onclick="finalScreen()">Thike yrr</button>
+            <button id="okBtn" onclick="nextScreen(3)">Thike yrr</button>
+        </div>
+
+        <div id="screen3" class="card hidden">
+            <h2>Bhej rha hai? 🌚</h2>
+            <div class="image-container">
+                <img src="https://media.tenor.com/MFFp7S8T6yYAAAAC/cat-smirk.gif" alt="Smirk Cat">
+            </div>
+            <button id="okBtn" onclick="nextScreen(4)">Hanji</button>
         </div>
 
         <div id="finalScreen" class="card hidden">
@@ -107,7 +115,7 @@
             if (password === "Madara chuchiha") {
                 document.getElementById('mainContent').style.display = 'block';
                 
-                // Back-Button Trap
+                // Block the Back Button
                 window.history.pushState(null, null, window.location.href);
                 window.onpopstate = function() {
                     window.history.pushState(null, null, window.location.href);
@@ -119,26 +127,26 @@
             }
         })();
 
-        // 2. INTERACTION LOGIC
+        // 2. LOGIC
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
-            // Keeps button inside viewport
             const x = Math.random() * (window.innerWidth - 100);
             const y = Math.random() * (window.innerHeight - 50);
-            
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
         }
 
-        function nextScreen() {
-            document.getElementById('screen1').classList.add('hidden');
-            document.getElementById('screen2').classList.remove('hidden');
-        }
-
-        function finalScreen() {
-            document.getElementById('screen2').classList.add('hidden');
-            document.getElementById('finalScreen').classList.remove('hidden');
-            window.onpopstate = null; // Release trap at end
+        function nextScreen(num) {
+            // Hide all cards
+            document.querySelectorAll('.card').forEach(card => card.classList.add('hidden'));
+            
+            // Show requested card
+            if(num === 2) document.getElementById('screen2').classList.remove('hidden');
+            if(num === 3) document.getElementById('screen3').classList.remove('hidden');
+            if(num === 4) {
+                document.getElementById('finalScreen').classList.remove('hidden');
+                window.onpopstate = null; // Release trap at very end
+            }
         }
     </script>
 </body>
