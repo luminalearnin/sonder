@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HELIOS // SATVIK DISTRIBUTION TERMINAL</title>
+    <title>SATVIK ROUTE // NEXT-GEN CULINARY DEPLOYMENT</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <!-- Three.js Library for True 3D Particle Orbiting Environments -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
-            --neon-cyan: #00f2ff;
-            --neon-green: #00ff66;
-            --bg-deep: #020205;
-            --glass-panel: rgba(10, 15, 30, 0.7);
-            --glass-border: rgba(0, 242, 255, 0.2);
-            --font-cyber: 'Share Tech Mono', 'Courier New', monospace;
+            --gold-glow: #ffaa00;
+            --saffron-neon: #ff6b00;
+            --cream-light: #fdf6e2;
+            --bg-obsidian: #0a0806;
+            --glass-card: rgba(22, 18, 14, 0.75);
+            --glass-border: rgba(255, 170, 0, 0.15);
+            --font-tech: 'Share Tech Mono', 'Courier New', monospace;
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
@@ -27,14 +30,25 @@
         body, html {
             width: 100%;
             height: 100%;
-            background-color: var(--bg-deep);
-            font-family: var(--font-cyber);
-            color: #ffffff;
+            background-color: var(--bg-obsidian);
+            font-family: var(--font-tech);
+            color: var(--cream-light);
             overflow-x: hidden;
         }
 
+        /* 3D WEBGL CANVAS BACKGROUND */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
         /* ========================
-           [VIDEO 1] LOADING SCREEN
+           [VIDEO 1] WARM BOOT LOADER
            ======================== */
         #loader-screen {
             position: fixed;
@@ -42,64 +56,52 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            background: #050403;
             z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 1s ease-out, transform 1s ease-out;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s ease;
         }
 
         .spinner-box {
             position: relative;
-            width: 150px;
-            height: 150px;
+            width: 140px;
+            height: 140px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .circle-loader {
+        .orbital-ring {
             width: 100%;
             height: 100%;
             border: 2px solid transparent;
-            border-top-color: var(--neon-cyan);
-            border-bottom-color: var(--neon-cyan);
+            border-top-color: var(--gold-glow);
+            border-bottom-color: var(--saffron-neon);
             border-radius: 50%;
-            animation: spin 1.5s linear infinite;
+            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         }
 
         .percent-text {
             position: absolute;
-            font-size: 1.8rem;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+            font-size: 1.6rem;
+            color: var(--gold-glow);
+            text-shadow: 0 0 15px rgba(255, 170, 0, 0.4);
+            font-weight: bold;
         }
 
         .load-status {
-            margin-top: 20px;
-            letter-spacing: 4px;
-            color: #557;
-            font-size: 0.9rem;
+            margin-top: 25px;
+            letter-spacing: 3px;
+            color: #8c7a6b;
+            font-size: 0.85rem;
             text-transform: uppercase;
         }
 
         /* ========================
-           BACKGROUND GALAXY ENGINE
-           ======================== */
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        /* ========================
-           [VIDEO 2] CORE DASHBOARD
+           [VIDEO 2] FLOATING UI CORE
            ======================== */
         #main-terminal {
             position: relative;
@@ -109,286 +111,285 @@
             opacity: 0;
             display: flex;
             flex-direction: column;
-            transition: opacity 1.5s ease-in;
-            padding: 30px;
+            transition: opacity 1.2s ease-in;
+            padding: 40px;
         }
 
-        /* TOP SYSTEMS HEADER */
         header {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px dashed var(--glass-border);
-            padding-bottom: 15px;
-            margin-bottom: 30px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
         }
 
-        .system-title {
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 8px rgba(0, 242, 255, 0.3);
+        .brand-logo {
+            font-size: 1.6rem;
+            letter-spacing: 4px;
+            color: var(--gold-glow);
+            text-shadow: 0 0 12px rgba(255, 170, 0, 0.2);
+            font-weight: bold;
         }
 
-        .system-title span {
-            color: var(--neon-green);
+        .brand-logo span {
+            color: #ffffff;
+            font-weight: normal;
         }
 
-        .live-timer {
-            font-size: 1rem;
-            color: #6a7b95;
+        .sys-clock {
+            font-size: 0.95rem;
+            color: #a69282;
+            letter-spacing: 1px;
         }
 
-        /* INTERACTIVE DASHBOARD STRUCTURE */
-        .dashboard-grid {
+        /* MAIN DISPLAY LAYOUT */
+        .dashboard-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1.11fr 0.89fr;
+            gap: 40px;
             flex-grow: 1;
+            align-items: start;
         }
 
-        @media (max-width: 1024px) {
-            .dashboard-grid { grid-template-columns: 1fr; }
+        @media (max-width: 1100px) {
+            .dashboard-container { grid-template-columns: 1fr; }
         }
 
-        /* TECH PODS / GLASS PANELS */
-        .cyber-panel {
-            background: var(--glass-panel);
+        /* PREMIUM GLASS POD PANELS */
+        .culinary-panel {
+            background: var(--glass-card);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 25px;
-            backdrop-filter: blur(12px);
-            box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.05), 0 10px 30px rgba(0,0,0,0.7);
-            position: relative;
-            overflow: hidden;
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(255, 107, 0, 0.02);
+            transform: translateY(0);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s;
         }
 
-        .cyber-panel::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-            animation: scanningLine 3s linear infinite;
+        .culinary-panel:hover {
+            border-color: rgba(255, 170, 0, 0.3);
+            transform: translateY(-4px);
         }
 
-        .panel-header {
-            font-size: 1.1rem;
-            color: var(--neon-cyan);
+        .panel-title {
+            font-size: 1.2rem;
+            color: var(--gold-glow);
             letter-spacing: 2px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--neon-green);
-            padding-left: 10px;
-            text-transform: uppercase;
+            margin-bottom: 25px;
+            border-bottom: 1px dashed var(--glass-border);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
         }
 
-        /* INTERACTIVE MATRIX MENUS */
-        .menu-rack {
+        /* FUNCTIONAL OPTION SELECTION BRICK */
+        .menu-node {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
-        .matrix-btn {
-            background: rgba(25, 35, 55, 0.4);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 6px;
-            color: #fff;
-            font-family: inherit;
-            text-align: left;
+        .interactive-row {
+            background: rgba(36, 28, 22, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 18px 22px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .matrix-btn:hover {
-            border-color: var(--neon-cyan);
-            background: rgba(0, 242, 255, 0.1);
-            transform: scale(1.01);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+        .interactive-row:hover {
+            border-color: var(--gold-glow);
+            background: rgba(255, 170, 0, 0.08);
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.1);
         }
 
-        .sub-matrix {
+        .nested-payload {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-out;
-            padding-left: 15px;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-left: 20px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .sub-item {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(0, 242, 255, 0.1);
-            padding: 12px;
-            border-radius: 4px;
+        .payload-card {
+            background: rgba(10, 8, 6, 0.6);
+            border: 1px solid rgba(255, 170, 0, 0.08);
+            padding: 14px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.9rem;
             transition: 0.2s;
         }
 
-        .sub-item:hover {
-            border-color: var(--neon-green);
-            color: var(--neon-green);
-            background: rgba(0, 255, 102, 0.05);
+        .payload-card:hover {
+            border-color: var(--saffron-neon);
+            color: var(--gold-glow);
+            background: rgba(255, 107, 0, 0.04);
         }
 
-        /* INPUT TERMINAL FORM */
-        .input-group {
-            margin-bottom: 18px;
+        /* FORM FIELD INFRASTRUCTURE */
+        .field-box {
+            margin-bottom: 20px;
         }
 
-        .input-group label {
+        .field-box label {
             display: block;
             font-size: 0.8rem;
-            color: #6a7b95;
-            margin-bottom: 6px;
+            color: #a69282;
+            margin-bottom: 8px;
             letter-spacing: 1px;
         }
 
-        .input-group input, .input-group select, .input-group textarea {
+        .field-box input, .field-box select, .field-box textarea {
             width: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            padding: 12px;
+            background: rgba(10, 8, 6, 0.8);
+            border: 1px solid rgba(255, 170, 0, 0.15);
+            padding: 14px;
             color: #fff;
             font-family: inherit;
-            border-radius: 4px;
+            border-radius: 6px;
             outline: none;
             transition: 0.3s;
         }
 
-        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+        .field-box input:focus, .field-box select:focus, .field-box textarea:focus {
+            border-color: var(--gold-glow);
+            box-shadow: 0 0 12px rgba(255, 170, 0, 0.15);
         }
 
-        /* RADIAL ACTION BUTTONS */
-        .deploy-btn {
+        /* LUXURY ACTION DEPLOYMENT RUNNER */
+        .dispatch-btn {
             width: 100%;
-            background: linear-gradient(135deg, #00b4d8, #00f2ff);
+            background: linear-gradient(135deg, var(--gold-glow), var(--saffron-neon));
             color: #000;
             border: none;
-            padding: 16px;
+            padding: 18px;
             font-family: inherit;
             font-weight: bold;
             font-size: 1.1rem;
-            letter-spacing: 2px;
-            border-radius: 6px;
+            letter-spacing: 3px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: 0.3s;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
             margin-top: 10px;
         }
 
-        .deploy-btn:hover {
-            box-shadow: 0 0 25px var(--neon-cyan);
+        .dispatch-btn:hover {
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
             transform: translateY(-2px);
         }
 
-        /* KEYFRAME SCHEDULERS */
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes scanningLine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
     </style>
 </head>
 <body>
 
+    <!-- BOOT LOADER LAYER -->
     <div id="loader-screen">
         <div class="spinner-box">
-            <div class="circle-loader"></div>
+            <div class="orbital-ring"></div>
             <div class="percent-text" id="load-digit">0%</div>
         </div>
-        <div class="load-status" id="load-string">ACCESSING SATVIK NET ENGINE...</div>
+        <div class="load-status" id="load-string">ESTABLISHING KITCHEN FREIGHT MATRIX...</div>
     </div>
 
-    <canvas id="particle-canvas"></canvas>
+    <!-- LIVE 3D INTERACTIVE PARTICLE GRAPHICS LAYER -->
+    <div id="webgl-canvas"></div>
 
+    <!-- DYNAMIC CENTRAL CONTROL OVERLAY -->
     <main id="main-terminal">
         <header>
-            <div class="system-title">// HELIOS // <span>SATVIK FREIGHT CODES</span></div>
-            <div class="live-timer" id="clock">SYS_TIME // 00:00:00</div>
+            <div class="brand-logo">// SATVIK ROUTE // <span>CATERING ENGINE</span></div>
+            <div class="sys-clock" id="live-time">SYS_CLOCK // 00:00:00</div>
         </header>
 
-        <div class="dashboard-grid">
+        <div class="dashboard-container">
             
-            <div class="cyber-panel">
-                <div class="panel-header">[MODULE 01] // DIETARY CONFIGURATIONS</div>
-                <div class="menu-rack">
+            <!-- CONTROLLER MODULE 01: FLUID MENU NODES -->
+            <div class="culinary-panel">
+                <div class="panel-title">
+                    <span>[01_MENU_CONFIGURATOR]</span>
+                    <span style="color: #635347; font-size: 0.8rem;">PURE VEG / ZERO ONION-GARLIC</span>
+                </div>
+                <div class="menu-node">
                     
-                    <div class="matrix-btn" onclick="toggleRack('pack-breakfast')">
-                        <span>[01_BREAKFAST_MATRIX]</span>
-                        <i class="fas fa-microchip"></i>
+                    <div class="interactive-row" onclick="openRack('rack-breakfast')">
+                        <span>BREAKFAST PROTOCOL PACKS</span>
+                        <i class="fas fa-utensils" style="color: var(--gold-glow);"></i>
                     </div>
-                    <div id="pack-breakfast" class="sub-matrix">
-                        <div class="sub-item" onclick="lockConfig('Breakfast Protocol: Bread + Butter + Poha Custom')">👉 EXTEND: BREAD + BUTTER + POHA SYSTEM</div>
-                        <div class="sub-item" onclick="lockConfig('Breakfast Protocol: Bread + Butter + Suji Upma')">👉 EXTEND: BREAD + BUTTER + UPMA MODULE</div>
-                    </div>
-
-                    <div class="matrix-btn" onclick="toggleRack('pack-lunch')">
-                        <span>[02_LUNCH_FREIGHT]</span>
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <div id="pack-lunch" class="sub-matrix">
-                        <div class="sub-item" onclick="lockConfig('Lunch Payload: Roti Base Thali')">🔋 DEPLOY ROTI MATRIX (4 Roti, 2 Sabji, Dal, Sweet, Achar)</div>
-                        <div class="sub-item" onclick="lockConfig('Lunch Payload: Basmati Rice Thali')">🔋 DEPLOY RICE MATRIX (Basmati, 2 Sabji, Dal, Sweet, Achar)</div>
-                        <div class="sub-item" onclick="lockConfig('Lunch Payload: Nutri Daliya Matrix')">🔋 DEPLOY DALIYA MATRIX (Healthy Daliya, Curd, Achar)</div>
+                    <div id="rack-breakfast" class="nested-payload">
+                        <div class="payload-card" onclick="lockSelection('Breakfast: Bread-Butter + Fresh Poha Matrix')">🔸 RUN MODULE: Bread, Butter + Homestyle Poha Matrix</div>
+                        <div class="payload-card" onclick="lockSelection('Breakfast: Bread-Butter + Savory Suji Upma')">🔸 RUN MODULE: Bread, Butter + Savory Suji Upma Matrix</div>
                     </div>
 
-                    <div class="matrix-btn" onclick="toggleRack('pack-dinner')">
-                        <span>[03_DINNER_FREIGHT]</span>
-                        <i class="fas fa-shield-halved"></i>
+                    <div class="interactive-row" onclick="openRack('rack-lunch')">
+                        <span>LUNCH CONSOLIDATION FREIGHT</span>
+                        <i class="fas fa-bowl-rice" style="color: var(--gold-glow);"></i>
                     </div>
-                    <div id="pack-dinner" class="sub-matrix">
-                        <div class="sub-item" onclick="lockConfig('Dinner Payload: Roti Base Thali')">🌙 DEPLOY ROTI MATRIX (4 Roti, 2 Sabji, Dal, Sweet, Achar)</div>
-                        <div class="sub-item" onclick="lockConfig('Dinner Payload: Basmati Rice Thali')">🌙 DEPLOY RICE MATRIX (Basmati, 2 Sabji, Dal, Sweet, Achar)</div>
-                        <div class="sub-item" onclick="lockConfig('Dinner Payload: Nutri Daliya Matrix')">🌙 DEPLOY DALIYA MATRIX (Healthy Daliya, Curd, Achar)</div>
+                    <div id="rack-lunch" class="nested-payload">
+                        <div class="payload-card" onclick="lockSelection('Lunch Matrix: Premium Ghee Roti Thali')">🔸 CONFIG: Ghee Roti Plan (4 Roti, 2 Sabji, Dal Fry, Dessert, Achar)</div>
+                        <div class="payload-card" onclick="lockSelection('Lunch Matrix: Royal Basmati Rice Thali')">🔸 CONFIG: Basmati Rice Plan (Rice, 2 Sabji, Dal Fry, Dessert, Achar)</div>
+                        <div class="payload-card" onclick="lockSelection('Lunch Matrix: Health Daliya Core')">🔸 CONFIG: Balanced Daliya Plan (Nutrient Daliya, Fresh Curd, Achar)</div>
+                    </div>
+
+                    <div class="interactive-row" onclick="openRack('rack-dinner')">
+                        <span>DINNER DEPLOYMENT SYSTEM</span>
+                        <i class="fas fa-moon" style="color: var(--gold-glow);"></i>
+                    </div>
+                    <div id="rack-dinner" class="nested-payload">
+                        <div class="payload-card" onclick="lockSelection('Dinner Matrix: Premium Ghee Roti Thali')">🔸 CONFIG: Ghee Roti Plan (4 Roti, 2 Sabji, Dal Fry, Dessert, Achar)</div>
+                        <div class="payload-card" onclick="lockSelection('Dinner Matrix: Royal Basmati Rice Thali')">🔸 CONFIG: Basmati Rice Plan (Rice, 2 Sabji, Dal Fry, Dessert, Achar)</div>
+                        <div class="payload-card" onclick="lockSelection('Dinner Matrix: Health Daliya Core')">🔸 CONFIG: Balanced Daliya Plan (Nutrient Daliya, Fresh Curd, Achar)</div>
                     </div>
 
                 </div>
             </div>
 
-            <div class="cyber-panel">
-                <div class="panel-header">[MODULE 02] // INTERCEPT DEPLOYMENT FORM</div>
-                <form id="terminalData">
-                    <div class="input-group">
-                        <label>PILGRIM IDENTIFICATION</label>
-                        <input type="text" id="pName" required placeholder="Input name...">
+            <!-- CONTROLLER MODULE 02: TRACK INTERCEPT DISPATCH -->
+            <div class="culinary-panel">
+                <div class="panel-title">[02_INTERCEPT_DATA_ENTRY]</div>
+                <form id="orderForm">
+                    <div class="field-box">
+                        <label>PILGRIM INVENTORY IDENTIFIER (NAME)</label>
+                        <input type="text" id="formName" required placeholder="Enter full name...">
                     </div>
-                    <div class="input-group">
-                        <label>INTERCEPT LOCATION STATION</label>
-                        <select id="pStation" required>
-                            <option value="">-- RESOLVING STATIONS --</option>
-                            <option value="Lanka (LKA)">LANKA RAILWAY STATION (LKA)</option>
-                            <option value="Hojai (HJI)">HOJAI RAILWAY STATION (HJI)</option>
+                    <div class="field-box">
+                        <label>INTERCEPT VECTOR STATION</label>
+                        <select id="formStation" required>
+                            <option value="">-- RESOLVING ROUTE STATIONS --</option>
+                            <option value="Lanka Station">LANKA RAILWAY STATION (LKA)</option>
+                            <option value="Hojai Station">HOJAI RAILWAY STATION (HJI)</option>
                         </select>
                     </div>
-                    <div class="input-group">
-                        <label>TRAIN BERTH DATA / COACH VECTOR</label>
-                        <input type="text" id="pTrain" required placeholder="e.g., Train 12345, Coach B1, Seat 42">
+                    <div class="field-box">
+                        <label>BERTH SCHEDULING ARRAY (TRAIN / COACH / SEAT)</label>
+                        <input type="text" id="formBerth" required placeholder="e.g., Train 15658, Coach M3, Seat 14">
                     </div>
-                    <div class="input-group">
-                        <label>LOCKED CHARGE CODE</label>
-                        <input type="text" id="pLockedCode" readonly placeholder="Select a core matrix file to lock configuration..." style="color: var(--neon-green); border-color: var(--neon-green);">
+                    <div class="field-box">
+                        <label>LOCKED DIETARY PAYLOAD</label>
+                        <input type="text" id="formPayload" readonly placeholder="Expand menu module and lock selection..." style="color: var(--gold-glow); border-color: rgba(255, 170, 0, 0.4);">
                     </div>
-                    <div class="input-group">
-                        <label>DIETARY MODIFICATION SCHEMATIC</label>
-                        <textarea id="pCustom" rows="2" placeholder="Input structural alterations (Allergies, custom demands)..."></textarea>
+                    <div class="field-box">
+                        <label>CUSTOM INJECTED REQUIREMENTS</label>
+                        <textarea id="formCustom" rows="2" placeholder="Any allergy patches or custom requests..."></textarea>
                     </div>
-                    <div class="input-group">
-                        <label>TRANSACTION ARCHITECTURE PROTOCOL</label>
-                        <select id="pPay">
-                            <option value="COD">HAND-TO-HAND CAPITAL ESCROW (COD)</option>
-                            <option value="UPI">INSTANT ONLINE VECTOR SECURE SCAN (UPI QR)</option>
+                    <div class="field-box">
+                        <label>CAPITAL ESCROW GATEWAY</label>
+                        <select id="formPay">
+                            <option value="COD">HAND-TO-HAND ESCROW DISPATCH (COD)</option>
+                            <option value="UPI">SECURE UPI NET GATEWAY ENCRYPT</option>
                         </select>
                     </div>
-                    <button type="submit" class="deploy-btn">EXECUTE INJECTION COMMAND</button>
+                    <button type="submit" class="dispatch-btn">LAUNCH LOGISTICS TRANSMISSION</button>
                 </form>
             </div>
 
@@ -396,113 +397,144 @@
     </main>
 
     <script>
-        // SYSTEM BOOT ENGINE (0-100% Loader Simulation)
-        let percent = 0;
-        const digit = document.getElementById('load-digit');
-        const str = document.getElementById('load-string');
-        const strings = ["MOUNTING PARTICLE GRAPHICS...", "BOOTING GRID SYSTEM...", "LOCKING RAILWAY DATABASES...", "SYSTEM READY"];
-        
+        // SYSTEM SETUP SEQUENCER (0-100% SIMULATOR)
+        let count = 0;
+        const digitElement = document.getElementById('load-digit');
+        const traceElement = document.getElementById('load-string');
+        const logs = ["COMPILING 3D CORE ORBITS...", "OPTIMIZING CULINARY NODES...", "SYNCING STATION TIMETABLES...", "INITIALIZATION SUCCESSFUL"];
+
         let bootSequence = setInterval(() => {
-            percent += Math.floor(Math.random() * 8) + 2;
-            if (percent >= 100) {
-                percent = 100;
+            count += Math.floor(Math.random() * 6) + 3;
+            if(count >= 100) {
+                count = 100;
                 clearInterval(bootSequence);
                 setTimeout(() => {
                     document.getElementById('loader-screen').style.opacity = '0';
-                    document.getElementById('loader-screen').style.transform = 'scale(1.1)';
+                    document.getElementById('loader-screen').style.transform = 'translateY(-30px)';
                     setTimeout(() => {
                         document.getElementById('loader-screen').style.display = 'none';
                         document.getElementById('main-terminal').style.opacity = '1';
-                    }, 1000);
-                }, 500);
+                    }, 800);
+                }, 400);
             }
-            digit.innerText = percent + "%";
-            str.innerText = strings[Math.floor(percent / 30)] || strings[3];
-        }, 80);
+            digitElement.innerText = count + "%";
+            traceElement.innerText = logs[Math.floor(count / 28)] || logs[3];
+        }, 60);
 
-        // LIVE MATRIX CLOCK ENGINE
+        // SYSTEM TIME INTERFACE RUNNER
         setInterval(() => {
-            const d = new Date();
-            document.getElementById('clock').innerText = `SYS_TIME // ${d.toTimeString().split(' ')[0]}`;
+            const time = new Date();
+            document.getElementById('live-time').innerText = `SYS_CLOCK // ${time.toTimeString().split(' ')[0]}`;
         }, 1000);
 
-        // INTERACTIVE DATA PANEL TOGGLES
-        function toggleRack(id) {
-            const el = document.getElementById(id);
-            if(el.style.maxHeight && el.style.maxHeight !== '0px') {
-                el.style.maxHeight = '0px';
+        // EXPAND INTERACTIVE MODULE PACKS
+        function openRack(id) {
+            const target = document.getElementById(id);
+            if(target.style.maxHeight && target.style.maxHeight !== '0px') {
+                target.style.maxHeight = '0px';
             } else {
-                document.querySelectorAll('.sub-matrix').forEach(m => m.style.maxHeight = '0px');
-                el.style.maxHeight = el.scrollHeight + "px";
+                document.querySelectorAll('.nested-payload').forEach(el => el.style.maxHeight = '0px');
+                target.style.maxHeight = target.scrollHeight + 'px';
             }
         }
 
-        function lockConfig(val) {
-            document.getElementById('pLockedCode').value = val;
+        function lockSelection(txt) {
+            document.getElementById('formPayload').value = txt;
         }
 
-        // [VIDEO 2] INTERACTIVE PARTICLE ENGINE (Canvas Layer)
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let points = [];
+        // ==========================================
+        // TRUE THREE.JS 3D FLOATING SPACE ENVIRONMENT
+        // ==========================================
+        const container = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        
+        // Perspective Camera Setup
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 85;
 
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // Generate Galactic Culinary Ring Topology
+        const particleCount = 1800;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+
+        const primaryColor = new THREE.Color('#ffaa00'); // Gold
+        const secondaryColor = new THREE.Color('#ff5500'); // Saffron
+
+        for(let i = 0; i < particleCount; i++) {
+            // Mathematical Ring/Torus Orbit Generation
+            const u = Math.random();
+            const theta = Math.random() * Math.PI * 2;
+            const radius = 35 + Math.random() * 20;
+
+            positions[i * 3] = Math.cos(theta) * radius + (Math.random() - 0.5) * 8;
+            positions[i * 3 + 1] = Math.sin(theta) * radius + (Math.random() - 0.5) * 8;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 25;
+
+            // Blend high-end catering tones into the 3D grid
+            const mixedColor = primaryColor.clone().lerp(secondaryColor, Math.random());
+            colors[i * 3] = mixedColor.r;
+            colors[i * 3 + 1] = mixedColor.g;
+            colors[i * 3 + 2] = mixedColor.b;
         }
-        window.addEventListener('resize', resize);
-        resize();
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.r = Math.random() * 2 + 0.5;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if(this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if(this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
-                ctx.fillStyle = 'rgba(0, 242, 255, 0.4)';
-                ctx.fill();
-            }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        // Point Material Shader Configuration
+        const material = new THREE.PointsMaterial({
+            size: 0.6,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.55,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+
+        const particleSystem = new THREE.Points(geometry, material);
+        scene.add(particleSystem);
+
+        // Tilt System subtly for visual depth
+        particleSystem.rotation.x = Math.PI / 3;
+
+        // Interactive Mouse Traversal Variables
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.03;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.03;
+        });
+
+        // 3D Runtime Render Loop Loop
+        function renderLoop() {
+            requestAnimationFrame(renderLoop);
+
+            // Constant passive cosmic orbit spin
+            particleSystem.rotation.z += 0.0015;
+
+            // Interactive parallax floating adjustments based on mouse trajectories
+            particleSystem.rotation.x += (mouseY * 0.05 - particleSystem.rotation.x) * 0.05 + 0.0001;
+            particleSystem.rotation.y += (mouseX * 0.05 - particleSystem.rotation.y) * 0.05;
+
+            renderer.render(scene, camera);
         }
+        renderLoop();
 
-        for(let i=0; i<120; i++) points.push(new Particle());
+        // Responsive Screen Resizer Engine
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
 
-        function animateParticles() {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            // Galaxy mesh drawing
-            for(let i=0; i<points.length; i++) {
-                points[i].update();
-                points[i].draw();
-                for(let j=i+1; j<points.length; j++) {
-                    let dist = Math.hypot(points[i].x - points[j].x, points[i].y - points[j].y);
-                    if(dist < 100) {
-                        ctx.beginPath();
-                        ctx.moveTo(points[i].x, points[i].y);
-                        ctx.lineTo(points[j].x, points[j].y);
-                        ctx.strokeStyle = `rgba(0, 242, 255, ${0.15 - dist/1000})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        // FORM DEPLOYMENT LOGIC
-        document.getElementById('terminalData').addEventListener('submit', function(e) {
+        // DISPATCH DATA ACTION FORM
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert("COMMAND DISPATCHED:\nData pipeline synced. Order vector transmission successful.");
+            alert("DATA PACKAGE SYNCHRONIZED:\nCatering deployment commands routed successfully.");
         });
     </script>
 </body>
