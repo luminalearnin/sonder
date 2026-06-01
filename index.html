@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SATVIK ROUTE // NEXT-GEN CULINARY DEPLOYMENT</title>
+    <title>HELIOS SYSTEM // SATVIK ROUTE CATERING CORE</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <!-- Three.js Library for True 3D Particle Orbiting Environments -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
-            --gold-glow: #ffaa00;
-            --saffron-neon: #ff6b00;
-            --cream-light: #fdf6e2;
-            --bg-obsidian: #0a0806;
-            --glass-card: rgba(22, 18, 14, 0.75);
-            --glass-border: rgba(255, 170, 0, 0.15);
-            --font-tech: 'Share Tech Mono', 'Courier New', monospace;
+            --luxury-gold: #ffaa00;
+            --saffron-fire: #ff5500;
+            --cream-space: #fff1d0;
+            --bg-absolute: #030202;
+            --font-terminal: 'Share Tech Mono', monospace;
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
@@ -30,511 +27,577 @@
         body, html {
             width: 100%;
             height: 100%;
-            background-color: var(--bg-obsidian);
-            font-family: var(--font-tech);
-            color: var(--cream-light);
-            overflow-x: hidden;
+            background-color: var(--bg-absolute);
+            font-family: var(--font-terminal);
+            color: var(--cream-space);
+            overflow: hidden;
         }
 
-        /* 3D WEBGL CANVAS BACKGROUND */
-        #webgl-canvas {
-            position: fixed;
+        /* FULLSCREEN FLOATING 3D GRAPHICS RENDERER */
+        #viewport-3d {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: 1;
+        }
+
+        /* 2D HUD OVERLAY LAYER FOR STATIC ACTIONS & ALERTS */
+        #hud-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
             pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+        }
+
+        .hud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .system-log {
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            color: var(--luxury-gold);
+            text-shadow: 0 0 10px rgba(255,170,0,0.3);
+            font-weight: bold;
+        }
+
+        .system-counter {
+            font-size: 0.9rem;
+            color: #8a7361;
+        }
+
+        /* INTERACTIVE 2D INTERFACE POPUP MODAL (TRIGGERS VIA 3D CLICKS) */
+        .terminal-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%;
+            max-width: 550px;
+            background: rgba(15, 12, 10, 0.9);
+            border: 1px solid rgba(255, 170, 0, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            z-index: 100;
+            display: none;
+            opacity: 0;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 40px rgba(255, 85, 0, 0.15), inset 0 0 20px rgba(0,0,0,0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-active {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-title {
+            color: var(--luxury-gold);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            border-bottom: 1px dashed rgba(255, 170, 0, 0.2);
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-token {
+            cursor: pointer;
+            color: #7a6555;
+            transition: 0.2s;
+        }
+
+        .close-token:hover { color: #fff; }
+
+        /* INPUT CONFIG MATRIX FOR FORM */
+        .data-field {
+            margin-bottom: 18px;
+        }
+
+        .data-field label {
+            display: block;
+            font-size: 0.8rem;
+            color: #8c7767;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .data-field input, .data-field select, .data-field textarea {
+            width: 100%;
+            background: #000;
+            border: 1px solid rgba(255, 170, 0, 0.2);
+            padding: 12px;
+            color: #fff;
+            font-family: inherit;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .data-field input:focus, .data-field select:focus {
+            border-color: var(--luxury-gold);
+        }
+
+        .action-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--luxury-gold), var(--saffron-fire));
+            color: #000;
+            border: none;
+            padding: 15px;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .action-button:hover {
+            box-shadow: 0 0 25px rgba(255, 107, 0, 0.4);
+        }
+
+        /* TOOLTIP NODE SCANNER INDICATOR */
+        #node-scanner-hud {
+            position: absolute;
+            background: rgba(5,4,3,0.85);
+            border: 1px solid var(--luxury-gold);
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            pointer-events: none;
+            display: none;
+            z-index: 50;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255,170,0,0.2);
         }
 
         /* ========================
-           [VIDEO 1] WARM BOOT LOADER
+           [VIDEO 1] HIGH-TECH LOADING SCREEN
            ======================== */
-        #loader-screen {
+        #boot-loader {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #050403;
+            background: #030202;
             z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s ease;
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        .spinner-box {
+        .loader-ring-box {
             position: relative;
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .orbital-ring {
+        .spinning-vortex {
             width: 100%;
             height: 100%;
             border: 2px solid transparent;
-            border-top-color: var(--gold-glow);
-            border-bottom-color: var(--saffron-neon);
+            border-top-color: var(--luxury-gold);
+            border-bottom-color: var(--saffron-fire);
             border-radius: 50%;
-            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            animation: vectorSpin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
-        .percent-text {
+        .digit-stream {
             position: absolute;
-            font-size: 1.6rem;
-            color: var(--gold-glow);
-            text-shadow: 0 0 15px rgba(255, 170, 0, 0.4);
+            font-size: 1.5rem;
+            color: var(--luxury-gold);
             font-weight: bold;
+            text-shadow: 0 0 10px rgba(255,170,0,0.3);
         }
 
-        .load-status {
+        .status-tracker {
             margin-top: 25px;
-            letter-spacing: 3px;
-            color: #8c7a6b;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-
-        /* ========================
-           [VIDEO 2] FLOATING UI CORE
-           ======================== */
-        #main-terminal {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            z-index: 2;
-            opacity: 0;
-            display: flex;
-            flex-direction: column;
-            transition: opacity 1.2s ease-in;
-            padding: 40px;
-        }
-
-        header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 20px;
-            margin-bottom: 40px;
-        }
-
-        .brand-logo {
-            font-size: 1.6rem;
             letter-spacing: 4px;
-            color: var(--gold-glow);
-            text-shadow: 0 0 12px rgba(255, 170, 0, 0.2);
-            font-weight: bold;
-        }
-
-        .brand-logo span {
-            color: #ffffff;
-            font-weight: normal;
-        }
-
-        .sys-clock {
-            font-size: 0.95rem;
-            color: #a69282;
-            letter-spacing: 1px;
-        }
-
-        /* MAIN DISPLAY LAYOUT */
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: 1.11fr 0.89fr;
-            gap: 40px;
-            flex-grow: 1;
-            align-items: start;
-        }
-
-        @media (max-width: 1100px) {
-            .dashboard-container { grid-template-columns: 1fr; }
-        }
-
-        /* PREMIUM GLASS POD PANELS */
-        .culinary-panel {
-            background: var(--glass-card);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 30px;
-            backdrop-filter: blur(16px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(255, 107, 0, 0.02);
-            transform: translateY(0);
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s;
-        }
-
-        .culinary-panel:hover {
-            border-color: rgba(255, 170, 0, 0.3);
-            transform: translateY(-4px);
-        }
-
-        .panel-title {
-            font-size: 1.2rem;
-            color: var(--gold-glow);
-            letter-spacing: 2px;
-            margin-bottom: 25px;
-            border-bottom: 1px dashed var(--glass-border);
-            padding-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* FUNCTIONAL OPTION SELECTION BRICK */
-        .menu-node {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .interactive-row {
-            background: rgba(36, 28, 22, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 18px 22px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .interactive-row:hover {
-            border-color: var(--gold-glow);
-            background: rgba(255, 170, 0, 0.08);
-            box-shadow: 0 0 20px rgba(255, 170, 0, 0.1);
-        }
-
-        .nested-payload {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-left: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .payload-card {
-            background: rgba(10, 8, 6, 0.6);
-            border: 1px solid rgba(255, 170, 0, 0.08);
-            padding: 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
-
-        .payload-card:hover {
-            border-color: var(--saffron-neon);
-            color: var(--gold-glow);
-            background: rgba(255, 107, 0, 0.04);
-        }
-
-        /* FORM FIELD INFRASTRUCTURE */
-        .field-box {
-            margin-bottom: 20px;
-        }
-
-        .field-box label {
-            display: block;
+            color: #594a3f;
             font-size: 0.8rem;
-            color: #a69282;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
         }
 
-        .field-box input, .field-box select, .field-box textarea {
-            width: 100%;
-            background: rgba(10, 8, 6, 0.8);
-            border: 1px solid rgba(255, 170, 0, 0.15);
-            padding: 14px;
-            color: #fff;
-            font-family: inherit;
-            border-radius: 6px;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .field-box input:focus, .field-box select:focus, .field-box textarea:focus {
-            border-color: var(--gold-glow);
-            box-shadow: 0 0 12px rgba(255, 170, 0, 0.15);
-        }
-
-        /* LUXURY ACTION DEPLOYMENT RUNNER */
-        .dispatch-btn {
-            width: 100%;
-            background: linear-gradient(135deg, var(--gold-glow), var(--saffron-neon));
-            color: #000;
-            border: none;
-            padding: 18px;
-            font-family: inherit;
-            font-weight: bold;
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .dispatch-btn:hover {
-            box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
-            transform: translateY(-2px);
-        }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes vectorSpin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <!-- BOOT LOADER LAYER -->
-    <div id="loader-screen">
-        <div class="spinner-box">
-            <div class="orbital-ring"></div>
-            <div class="percent-text" id="load-digit">0%</div>
+    <div id="boot-loader">
+        <div class="loader-ring-box">
+            <div class="spinning-vortex"></div>
+            <div class="digit-stream" id="load-value">0%</div>
         </div>
-        <div class="load-status" id="load-string">ESTABLISHING KITCHEN FREIGHT MATRIX...</div>
+        <div class="status-tracker" id="load-string">INITIALIZING QUANTUM CULINARY ENGINE...</div>
     </div>
 
-    <!-- LIVE 3D INTERACTIVE PARTICLE GRAPHICS LAYER -->
-    <div id="webgl-canvas"></div>
+    <div id="viewport-3d"></div>
 
-    <!-- DYNAMIC CENTRAL CONTROL OVERLAY -->
-    <main id="main-terminal">
-        <header>
-            <div class="brand-logo">// SATVIK ROUTE // <span>CATERING ENGINE</span></div>
-            <div class="sys-clock" id="live-time">SYS_CLOCK // 00:00:00</div>
-        </header>
+    <div id="node-scanner-hud">SCANNING NODE...</div>
 
-        <div class="dashboard-container">
-            
-            <!-- CONTROLLER MODULE 01: FLUID MENU NODES -->
-            <div class="culinary-panel">
-                <div class="panel-title">
-                    <span>[01_MENU_CONFIGURATOR]</span>
-                    <span style="color: #635347; font-size: 0.8rem;">PURE VEG / ZERO ONION-GARLIC</span>
-                </div>
-                <div class="menu-node">
-                    
-                    <div class="interactive-row" onclick="openRack('rack-breakfast')">
-                        <span>BREAKFAST PROTOCOL PACKS</span>
-                        <i class="fas fa-utensils" style="color: var(--gold-glow);"></i>
-                    </div>
-                    <div id="rack-breakfast" class="nested-payload">
-                        <div class="payload-card" onclick="lockSelection('Breakfast: Bread-Butter + Fresh Poha Matrix')">🔸 RUN MODULE: Bread, Butter + Homestyle Poha Matrix</div>
-                        <div class="payload-card" onclick="lockSelection('Breakfast: Bread-Butter + Savory Suji Upma')">🔸 RUN MODULE: Bread, Butter + Savory Suji Upma Matrix</div>
-                    </div>
-
-                    <div class="interactive-row" onclick="openRack('rack-lunch')">
-                        <span>LUNCH CONSOLIDATION FREIGHT</span>
-                        <i class="fas fa-bowl-rice" style="color: var(--gold-glow);"></i>
-                    </div>
-                    <div id="rack-lunch" class="nested-payload">
-                        <div class="payload-card" onclick="lockSelection('Lunch Matrix: Premium Ghee Roti Thali')">🔸 CONFIG: Ghee Roti Plan (4 Roti, 2 Sabji, Dal Fry, Dessert, Achar)</div>
-                        <div class="payload-card" onclick="lockSelection('Lunch Matrix: Royal Basmati Rice Thali')">🔸 CONFIG: Basmati Rice Plan (Rice, 2 Sabji, Dal Fry, Dessert, Achar)</div>
-                        <div class="payload-card" onclick="lockSelection('Lunch Matrix: Health Daliya Core')">🔸 CONFIG: Balanced Daliya Plan (Nutrient Daliya, Fresh Curd, Achar)</div>
-                    </div>
-
-                    <div class="interactive-row" onclick="openRack('rack-dinner')">
-                        <span>DINNER DEPLOYMENT SYSTEM</span>
-                        <i class="fas fa-moon" style="color: var(--gold-glow);"></i>
-                    </div>
-                    <div id="rack-dinner" class="nested-payload">
-                        <div class="payload-card" onclick="lockSelection('Dinner Matrix: Premium Ghee Roti Thali')">🔸 CONFIG: Ghee Roti Plan (4 Roti, 2 Sabji, Dal Fry, Dessert, Achar)</div>
-                        <div class="payload-card" onclick="lockSelection('Dinner Matrix: Royal Basmati Rice Thali')">🔸 CONFIG: Basmati Rice Plan (Rice, 2 Sabji, Dal Fry, Dessert, Achar)</div>
-                        <div class="payload-card" onclick="lockSelection('Dinner Matrix: Health Daliya Core')">🔸 CONFIG: Balanced Daliya Plan (Nutrient Daliya, Fresh Curd, Achar)</div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- CONTROLLER MODULE 02: TRACK INTERCEPT DISPATCH -->
-            <div class="culinary-panel">
-                <div class="panel-title">[02_INTERCEPT_DATA_ENTRY]</div>
-                <form id="orderForm">
-                    <div class="field-box">
-                        <label>PILGRIM INVENTORY IDENTIFIER (NAME)</label>
-                        <input type="text" id="formName" required placeholder="Enter full name...">
-                    </div>
-                    <div class="field-box">
-                        <label>INTERCEPT VECTOR STATION</label>
-                        <select id="formStation" required>
-                            <option value="">-- RESOLVING ROUTE STATIONS --</option>
-                            <option value="Lanka Station">LANKA RAILWAY STATION (LKA)</option>
-                            <option value="Hojai Station">HOJAI RAILWAY STATION (HJI)</option>
-                        </select>
-                    </div>
-                    <div class="field-box">
-                        <label>BERTH SCHEDULING ARRAY (TRAIN / COACH / SEAT)</label>
-                        <input type="text" id="formBerth" required placeholder="e.g., Train 15658, Coach M3, Seat 14">
-                    </div>
-                    <div class="field-box">
-                        <label>LOCKED DIETARY PAYLOAD</label>
-                        <input type="text" id="formPayload" readonly placeholder="Expand menu module and lock selection..." style="color: var(--gold-glow); border-color: rgba(255, 170, 0, 0.4);">
-                    </div>
-                    <div class="field-box">
-                        <label>CUSTOM INJECTED REQUIREMENTS</label>
-                        <textarea id="formCustom" rows="2" placeholder="Any allergy patches or custom requests..."></textarea>
-                    </div>
-                    <div class="field-box">
-                        <label>CAPITAL ESCROW GATEWAY</label>
-                        <select id="formPay">
-                            <option value="COD">HAND-TO-HAND ESCROW DISPATCH (COD)</option>
-                            <option value="UPI">SECURE UPI NET GATEWAY ENCRYPT</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="dispatch-btn">LAUNCH LOGISTICS TRANSMISSION</button>
-                </form>
-            </div>
-
+    <div id="hud-overlay">
+        <div class="hud-header">
+            <div class="system-log">// SATVIK_ROUTE_v2.06 //</div>
+            <div class="system-counter" id="clock-readout">SYS_TIME // 00:00:00</div>
         </div>
-    </main>
+        <div style="font-size: 0.8rem; color: #594a3f; letter-spacing: 1px;">
+            [MOUSE CONTROL DIRECTIONAL ORBIT ACTIVE] <br>
+            CLICK FLOATING NODES TO EXECUTE CORE UTILITIES
+        </div>
+    </div>
+
+    <div class="terminal-modal" id="modal-crew">
+        <div class="modal-title"><span>[DATA_NODE_01] // THE KITCHEN CREW</span> <i class="fas fa-times close-token" onclick="closeAllModals()"></i></div>
+        <p style="color: #c4b39b; line-height: 1.6; font-size: 0.95rem;">
+            <strong>Master Command Cook:</strong> My Father.<br>
+            Purity manifested. An expert specialized in 100% clean, pristine home-cooked meals engineered with strictly <strong>No Onion and No Garlic</strong>. Built specifically for Satsangee pilgrims executing journeys to the Deoghar Satsang Ashram via railway vectors.
+        </p>
+    </div>
+
+    <div class="terminal-modal" id="modal-breakfast">
+        <div class="modal-title"><span>[DATA_NODE_02] // BREAKFAST FREIGHT</span> <i class="fas fa-times close-token" onclick="closeAllModals()"></i></div>
+        <p style="color: #c4b39b; line-height: 1.6; margin-bottom: 15px;">Target Core Pricing: ₹50 - ₹60 per deployable kit.</p>
+        <ul style="padding-left: 20px; color: var(--luxury-gold); display: flex; flex-direction: column; gap: 8px;">
+            <li>Standard Array: Premium Bread + Fresh Cream Butter</li>
+            <li>Extended Utility 1: Homestyle Roasted Poha Module</li>
+            <li>Extended Utility 2: Steaming Suji Upma Configuration</li>
+        </ul>
+        <button class="action-button" style="margin-top:20px;" onclick="selectToForm('Breakfast Protocol Array [Bread+Butter+Poha]')">LOCK BREAKFAST ARRAY IN FORM</button>
+    </div>
+
+    <div class="terminal-modal" id="modal-meals">
+        <div class="modal-title"><span>[DATA_NODE_03] // MAIN COURSE FREIGHT</span> <i class="fas fa-times close-token" onclick="closeAllModals()"></i></div>
+        <p style="color: #c4b39b; line-height: 1.6; margin-bottom: 15px;">Target Core Pricing: ₹120 - ₹150 per premium Thali container.</p>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="background:#1c1612; padding:12px; border-radius:6px; cursor:pointer; border:1px solid rgba(255,170,0,0.1);" onclick="selectToForm('Lunch/Dinner: Roti Matrix Thali')">
+                <strong style="color:var(--luxury-gold);">[+] ROTI MATRIX CONFIGURATION</strong>
+                <p style="font-size:0.8rem; color:#aaa;">4 Soft Ghee Rotis + 2 Seasonal Day Sabjis + Dal Fry + Dessert + Pure Achar</p>
+            </div>
+            <div style="background:#1c1612; padding:12px; border-radius:6px; cursor:pointer; border:1px solid rgba(255,170,0,0.1);" onclick="selectToForm('Lunch/Dinner: Basmati Rice Thali')">
+                <strong style="color:var(--luxury-gold);">[+] BASMATI RICE CONFIGURATION</strong>
+                <p style="font-size:0.8rem; color:#aaa;">Basmati Rice + 2 Seasonal Day Sabjis + Dal Fry + Dessert + Pure Achar</p>
+            </div>
+            <div style="background:#1c1612; padding:12px; border-radius:6px; cursor:pointer; border:1px solid rgba(255,170,0,0.1);" onclick="selectToForm('Lunch/Dinner: Healthy Daliya Matrix')">
+                <strong style="color:var(--luxury-gold);">[+] NUTRIENT DALIYA CONFIGURATION</strong>
+                <p style="font-size:0.8rem; color:#aaa;">Wholesome Dressed Veg Daliya + Balanced Curd Blend + Pure Achar</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="terminal-modal" id="modal-dispatch">
+        <div class="modal-title"><span>[DATA_NODE_04] // ORDER DISPATCH TERMINAL</span> <i class="fas fa-times close-token" onclick="closeAllModals()"></i></div>
+        <form id="orderForm">
+            <div class="data-field">
+                <label>PILGRIM RECIPIENT IDENTIFIER (NAME)</label>
+                <input type="text" id="nameIn" required placeholder="Type name...">
+            </div>
+            <div class="data-field">
+                <label>INTERCEPT INTERSECTION STATION</label>
+                <select id="stationIn" required>
+                    <option value="">-- RESOLVE TRAIN ROUTE VECTOR --</option>
+                    <option value="Lanka Station">LANKA RAILWAY STATION (LKA)</option>
+                    <option value="Hojai Station">HOJAI RAILWAY STATION (HJI)</option>
+                </select>
+            </div>
+            <div class="data-field">
+                <label>TRAIN SCHEDULING SYSTEM (TRAIN NO / COACH / SEAT)</label>
+                <input type="text" id="trainIn" required placeholder="e.g., Train 12345, Coach S2, Berth 35">
+            </div>
+            <div class="data-field">
+                <label>LOCKED CHARGE MODULE PAYLOAD</label>
+                <input type="text" id="payloadIn" readonly placeholder="Click and lock an item from other nodes..." style="color:var(--luxury-gold); border-color: rgba(255,170,0,0.4);">
+            </div>
+            <div class="data-field">
+                <label>DIETARY OVERRIDE MEMO (CUSTOM EDITIONS / SPECIFIC REQUIREMENTS)</label>
+                <textarea id="customIn" rows="2" placeholder="Input structural alterations if needed..."></textarea>
+            </div>
+            <div class="data-field">
+                <label>TRANSACTION PROTOCOL MODULE</label>
+                <select id="payIn">
+                    <option value="COD">CASH ESCROW PAYMENT ON ARRIVAL (COD)</option>
+                    <option value="UPI">SECURE UPI INSTANT SCAN CONSOLE (QR GATEWAY)</option>
+                </select>
+            </div>
+            <button type="submit" class="action-button">INJECT COMPULSORY ORDER DISPATCH</button>
+        </form>
+    </div>
+
 
     <script>
-        // SYSTEM SETUP SEQUENCER (0-100% SIMULATOR)
-        let count = 0;
-        const digitElement = document.getElementById('load-digit');
-        const traceElement = document.getElementById('load-string');
-        const logs = ["COMPILING 3D CORE ORBITS...", "OPTIMIZING CULINARY NODES...", "SYNCING STATION TIMETABLES...", "INITIALIZATION SUCCESSFUL"];
+        // BOOT SYSTEM SEQUENCER
+        let bootProgress = 0;
+        const valueDisplay = document.getElementById('load-value');
+        const trackerText = document.getElementById('load-string');
+        const bootStrings = ["LOADING GRAPHICS INFRASTRUCTURE...", "COMPILING 3D CORE TEXT NODES...", "LOCKING RAILWAY GRID SYSTEMS...", "BOOT SEQUENCING RECTIFIED"];
 
-        let bootSequence = setInterval(() => {
-            count += Math.floor(Math.random() * 6) + 3;
-            if(count >= 100) {
-                count = 100;
-                clearInterval(bootSequence);
+        let systemBoot = setInterval(() => {
+            bootProgress += Math.floor(Math.random() * 5) + 2;
+            if(bootProgress >= 100) {
+                bootProgress = 100;
+                clearInterval(systemBoot);
                 setTimeout(() => {
-                    document.getElementById('loader-screen').style.opacity = '0';
-                    document.getElementById('loader-screen').style.transform = 'translateY(-30px)';
-                    setTimeout(() => {
-                        document.getElementById('loader-screen').style.display = 'none';
-                        document.getElementById('main-terminal').style.opacity = '1';
-                    }, 800);
+                    document.getElementById('boot-loader').style.opacity = '0';
+                    document.getElementById('boot-loader').style.transform = 'scale(0.9)';
+                    setTimeout(() => document.getElementById('boot-loader').style.display = 'none', 800);
                 }, 400);
             }
-            digitElement.innerText = count + "%";
-            traceElement.innerText = logs[Math.floor(count / 28)] || logs[3];
-        }, 60);
+            valueDisplay.innerText = bootProgress + "%";
+            trackerText.innerText = bootStrings[Math.floor(bootProgress / 28)] || bootStrings[3];
+        }, 500);
 
-        // SYSTEM TIME INTERFACE RUNNER
+        // REALTIME HUD TIMER 
         setInterval(() => {
-            const time = new Date();
-            document.getElementById('live-time').innerText = `SYS_CLOCK // ${time.toTimeString().split(' ')[0]}`;
+            const timeData = new Date();
+            document.getElementById('clock-readout').innerText = `SYS_TIME // ${timeData.toTimeString().split(' ')[0]}`;
         }, 1000);
 
-        // EXPAND INTERACTIVE MODULE PACKS
-        function openRack(id) {
-            const target = document.getElementById(id);
-            if(target.style.maxHeight && target.style.maxHeight !== '0px') {
-                target.style.maxHeight = '0px';
-            } else {
-                document.querySelectorAll('.nested-payload').forEach(el => el.style.maxHeight = '0px');
-                target.style.maxHeight = target.scrollHeight + 'px';
-            }
-        }
+        // 3D NODE DATA PACK MATRICES
+        const nodeDefinitions = [
+            { id: 'crew', title: 'LAUNCH: [ABOUT_CREW]', color: 0xffaa00, x: -35, y: 15, z: 0 },
+            { id: 'breakfast', title: 'LOAD: [BREAKFAST_PACKS]', color: 0xffdd44, x: 35, y: 20, z: -10 },
+            { id: 'meals', title: 'LOAD: [LUNCH_&_DINNER]', color: 0xff5500, x: -25, y: -20, z: 15 },
+            { id: 'dispatch', title: 'EXECUTE: [ORDER_TERMINAL]', color: 0xffaa00, x: 25, y: -15, z: 5 },
+            { id: 'core', title: '// SATVIK_ROUTE_CORE //', color: 0xffffff, x: 0, y: 0, z: -5, isCore: true }
+        ];
 
-        function lockSelection(txt) {
-            document.getElementById('formPayload').value = txt;
-        }
-
-        // ==========================================
-        // TRUE THREE.JS 3D FLOATING SPACE ENVIRONMENT
-        // ==========================================
-        const container = document.getElementById('webgl-canvas');
+        // INITIALIZE THREE.JS 3D SYSTEM ARCHITECTURE
+        const viewContainer = document.getElementById('viewport-3d');
         const scene = new THREE.Scene();
         
-        // Perspective Camera Setup
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 85;
+        // Setup Perspective Camera
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 90;
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
+        viewContainer.appendChild(renderer.domElement);
 
-        // Generate Galactic Culinary Ring Topology
-        const particleCount = 1800;
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
+        // GENERATE COSMIC ENVIRONMENT PARTICLES (BACKGROUND MATRIX SYSTEM)
+        const spaceParticlesCount = 1500;
+        const spaceGeometry = new THREE.BufferGeometry();
+        const spacePositions = new Float32Array(spaceParticlesCount * 3);
+        const spaceColors = new Float32Array(spaceParticlesCount * 3);
 
-        const primaryColor = new THREE.Color('#ffaa00'); // Gold
-        const secondaryColor = new THREE.Color('#ff5500'); // Saffron
+        const goldTint = new THREE.Color('#ffaa00');
+        const orangeTint = new THREE.Color('#ff3300');
 
-        for(let i = 0; i < particleCount; i++) {
-            // Mathematical Ring/Torus Orbit Generation
-            const u = Math.random();
-            const theta = Math.random() * Math.PI * 2;
-            const radius = 35 + Math.random() * 20;
+        for(let i=0; i < spaceParticlesCount; i++) {
+            spacePositions[i*3] = (Math.random() - 0.5) * 250;
+            spacePositions[i*3+1] = (Math.random() - 0.5) * 250;
+            spacePositions[i*3+2] = (Math.random() - 0.5) * 250;
 
-            positions[i * 3] = Math.cos(theta) * radius + (Math.random() - 0.5) * 8;
-            positions[i * 3 + 1] = Math.sin(theta) * radius + (Math.random() - 0.5) * 8;
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 25;
-
-            // Blend high-end catering tones into the 3D grid
-            const mixedColor = primaryColor.clone().lerp(secondaryColor, Math.random());
-            colors[i * 3] = mixedColor.r;
-            colors[i * 3 + 1] = mixedColor.g;
-            colors[i * 3 + 2] = mixedColor.b;
+            const mixedTint = goldTint.clone().lerp(orangeTint, Math.random());
+            spaceColors[i*3] = mixedTint.r;
+            spaceColors[i*3+1] = mixedTint.g;
+            spaceColors[i*3+2] = mixedTint.b;
         }
-
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-        // Point Material Shader Configuration
-        const material = new THREE.PointsMaterial({
-            size: 0.6,
+        spaceGeometry.setAttribute('position', new THREE.BufferAttribute(spacePositions, 3));
+        spaceGeometry.setAttribute('color', new THREE.BufferAttribute(spaceColors, 3));
+        
+        const spaceMaterial = new THREE.PointsMaterial({
+            size: 0.5,
             vertexColors: true,
             transparent: true,
-            opacity: 0.55,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
+            opacity: 0.4,
+            blending: THREE.AdditiveBlending
+        });
+        const spaceNetworkMesh = new THREE.Points(spaceGeometry, spaceMaterial);
+        scene.add(spaceNetworkMesh);
+
+        // CREATE TRUE DYNAMIC FLOATING INTERACTIVE GRAPHIC NODES
+        const nodesGroup = new THREE.Group();
+        scene.add(nodesGroup);
+
+        const nodeMeshes = [];
+
+        // Function to create a Canvas texture containing the actual text dynamically floating
+        function createTextTexture(text, colorStr) {
+            const canvasElement = document.createElement('canvas');
+            const ctx2d = canvasElement.getContext('2d');
+            canvasElement.width = 512;
+            canvasElement.height = 128;
+
+            // Translucent glowing tech background box
+            ctx2d.fillStyle = 'rgba(15, 10, 5, 0.7)';
+            ctx2d.fillRect(0, 0, 512, 128);
+            ctx2d.strokeStyle = colorStr;
+            ctx2d.lineWidth = 4;
+            ctx2d.strokeRect(0, 0, 512, 128);
+
+            // Draw text values
+            ctx2d.fillStyle = '#fff1d0';
+            ctx2d.font = 'bold 32px "Share Tech Mono", monospace';
+            ctx2d.textAlign = 'center';
+            ctx2d.textBaseline = 'middle';
+            ctx2d.shadowColor = colorStr;
+            ctx2d.shadowBlur = 15;
+            ctx2d.fillText(text, 256, 64);
+
+            const texture = new THREE.CanvasTexture(canvasElement);
+            return texture;
+        }
+
+        // Deploy node entities into 3D structural matrix positions
+        nodeDefinitions.forEach(def => {
+            const hexColorStr = '#' + def.color.toString(16).padStart(6, '0');
+            const texture = createTextTexture(def.title, hexColorStr);
+            
+            const planeGeo = new THREE.PlaneGeometry(28, 7);
+            const planeMat = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                side: THREE.DoubleSide,
+                blending: THREE.AdditiveBlending
+            });
+
+            const nodeMesh = new THREE.Mesh(planeGeo, planeMat);
+            nodeMesh.position.set(def.x, def.y, def.z);
+            nodeMesh.userData = { id: def.id, initialY: def.y, speedOffset: Math.random() * 5 };
+            
+            nodesGroup.add(nodeMesh);
+            nodeMeshes.push(nodeMesh);
         });
 
-        const particleSystem = new THREE.Points(geometry, material);
-        scene.add(particleSystem);
+        // CONNECTIVITY VECTOR INTERCONNECTED GRAPH LINKS (DRAWING LINES BETWEEN THE FLOATING WORDS)
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0.25 });
+        const coreNode = nodeDefinitions.find(n => n.isCore);
+        
+        nodeDefinitions.forEach(def => {
+            if(!def.isCore) {
+                const lineGeo = new THREE.BufferGeometry().setFromPoints([
+                    new THREE.Vector3(coreNode.x, coreNode.y, coreNode.z),
+                    new THREE.Vector3(def.x, def.y, def.z)
+                ]);
+                const netLine = new THREE.Line(lineGeo, lineMaterial);
+                scene.add(netLine);
+            }
+        });
 
-        // Tilt System subtly for visual depth
-        particleSystem.rotation.x = Math.PI / 3;
-
-        // Interactive Mouse Traversal Variables
+        // INTERACTIVE RAYCASTING MOUSE TRAVERSAL LOGIC (DETERMINES WHAT NODE IS BEING HOVERED/CLICKED)
+        const raycaster = new THREE.Raycaster();
+        const mouseCoordinates = new THREE.Vector2();
         let mouseX = 0, mouseY = 0;
-        window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) * 0.03;
-            mouseY = (e.clientY - window.innerHeight / 2) * 0.03;
+
+        window.addEventListener('mousemove', (event) => {
+            // Update mouse variables for structural orbit drift
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.05;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.05;
+
+            // Normalize coordinate data arrays for raycaster targeting map
+            mouseCoordinates.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseCoordinates.y = -(event.clientY / window.innerHeight) * 2 + 1;
         });
 
-        // 3D Runtime Render Loop Loop
-        function renderLoop() {
-            requestAnimationFrame(renderLoop);
+        // CLICK LISTENER VECTOR INJECTION ENGINE
+        window.addEventListener('click', () => {
+            raycaster.setFromCamera(mouseCoordinates, camera);
+            const intersections = raycaster.intersectObjects(nodeMeshes);
 
-            // Constant passive cosmic orbit spin
-            particleSystem.rotation.z += 0.0015;
+            if(intersections.length > 0) {
+                const triggeredNodeId = intersections[0].object.userData.id;
+                openModalEngine(triggeredNodeId);
+            }
+        });
 
-            // Interactive parallax floating adjustments based on mouse trajectories
-            particleSystem.rotation.x += (mouseY * 0.05 - particleSystem.rotation.x) * 0.05 + 0.0001;
-            particleSystem.rotation.y += (mouseX * 0.05 - particleSystem.rotation.y) * 0.05;
+        // 2D DISPLAY MODAL INTERPOLATION LOGIC
+        function openModalEngine(id) {
+            closeAllModals();
+            let targetModal = null;
+            if(id === 'crew') targetModal = document.getElementById('modal-crew');
+            if(id === 'breakfast') targetModal = document.getElementById('modal-breakfast');
+            if(id === 'meals') targetModal = document.getElementById('modal-meals');
+            if(id === 'dispatch') targetModal = document.getElementById('modal-dispatch');
+            if(id === 'core') targetModal = document.getElementById('modal-crew');
+
+            if(targetModal) targetModal.classList.add('modal-active');
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.terminal-modal').forEach(m => m.classList.remove('modal-active'));
+        }
+
+        function selectToForm(payloadValue) {
+            document.getElementById('payloadIn').value = payloadValue;
+            closeAllModals();
+            openModalEngine('dispatch'); // Pivot focus context back to order registration node automatically
+        }
+
+        // ============================================
+        // FRAME SYSTEM RENDERING ANIMATION REAL-TIME RUN LOOP
+        // ============================================
+        const clockTimer = new THREE.Clock();
+
+        function continuousRenderLoop() {
+            requestAnimationFrame(continuousRenderLoop);
+            const totalElapsedTime = clockTimer.getElapsedTime();
+
+            // Passive particle background cosmic rotation alignment
+            spaceNetworkMesh.rotation.y = totalElapsedTime * 0.02;
+
+            // MAKE EACH TEXT WORD FLOAT AND MOVE INDEPENDENTLY (WAVE SINE FLUID ACTION)
+            nodeMeshes.forEach(mesh => {
+                const individualOffset = totalElapsedTime * 1.5 + mesh.userData.speedOffset;
+                mesh.position.y = mesh.userData.initialY + Math.sin(individualOffset) * 2.5;
+                mesh.position.x += Math.cos(individualOffset) * 0.02;
+            });
+
+            // COMPULSORY INTERACTIVE PARALLAX: Dynamic matrix grid orbital shifts corresponding to mouse positioning coordinates
+            nodesGroup.rotation.y += (mouseX * 0.01 - nodesGroup.rotation.y) * 0.08;
+            nodesGroup.rotation.x += (mouseY * 0.01 - nodesGroup.rotation.x) * 0.08;
+
+            // RAYCAST HOVER SCANNER DISPLAY MANAGEMENT
+            raycaster.setFromCamera(mouseCoordinates, camera);
+            const hoverIntersections = raycaster.intersectObjects(nodeMeshes);
+            const scannerHud = document.getElementById('node-scanner-hud');
+
+            if(hoverIntersections.length > 0) {
+                document.body.style.cursor = 'pointer';
+                scannerHud.style.display = 'block';
+                scannerHud.style.left = (mouseCoordinates.x + 1) * window.innerWidth / 2 + 15 + 'px';
+                scannerHud.style.top = -(mouseCoordinates.y - 1) * window.innerHeight / 2 + 15 + 'px';
+                scannerHud.innerText = `TARGETED FREIGHT LINK // CLICK SYSTEM CORE`;
+            } else {
+                document.body.style.cursor = 'default';
+                scannerHud.style.display = 'none';
+            }
 
             renderer.render(scene, camera);
         }
-        renderLoop();
+        continuousRenderLoop();
 
-        // Responsive Screen Resizer Engine
+        // RUN RESPONSIVE DISPLAY VIEWPORT RE-SHAPER MATRIX
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // DISPATCH DATA ACTION FORM
+        // FORM SUBMISSION PIPELINE INJECTION
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert("DATA PACKAGE SYNCHRONIZED:\nCatering deployment commands routed successfully.");
+            alert("SUCCESS // ORDER FREIGHT SEQUENCE LOGGED:\nData transmission dispatched safely down the railway matrix channel.");
+            closeAllModals();
         });
     </script>
 </body>
