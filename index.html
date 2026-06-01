@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HELIOS SYSTEM // SATVIK ROUTE CATERING CORE</title>
+    <title>5D SATVIK ROUTE // CELESTIAL CULINARY ENGINE</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
-            --luxury-gold: #ffaa00;
-            --saffron-fire: #ff5500;
-            --cream-space: #fff1d0;
-            --bg-absolute: #030202;
-            --font-terminal: 'Share Tech Mono', monospace;
+            --cosmic-gold: #ffcc00;
+            --nebula-orange: #ff5500;
+            --starlight-white: #ffffff;
+            --void-black: #020101;
+            --interface-cream: #fff4db;
+            --font-cosmic: 'Share Tech Mono', monospace;
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
@@ -27,14 +28,14 @@
         body, html {
             width: 100%;
             height: 100%;
-            background-color: var(--bg-absolute);
-            font-family: var(--font-terminal);
-            color: var(--cream-space);
+            background-color: var(--void-black);
+            font-family: var(--font-cosmic);
+            color: var(--interface-cream);
             overflow: hidden;
         }
 
-        /* FULLSCREEN FLOATING 3D GRAPHICS RENDERER */
-        #viewport-3d {
+        /* 5D UNIVERSE CANVAS RENDERER */
+        #universe-canvas {
             position: absolute;
             top: 0;
             left: 0;
@@ -43,8 +44,8 @@
             z-index: 1;
         }
 
-        /* 2D HUD OVERLAY LAYER FOR STATIC ACTIONS & ALERTS */
-        #hud-overlay {
+        /* HUD CONTROLS OVERLAY */
+        #hud-container {
             position: absolute;
             top: 0;
             left: 0;
@@ -55,47 +56,52 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 30px;
+            padding: 35px;
         }
 
-        .hud-header {
+        .hud-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
         }
 
-        .system-log {
-            font-size: 1.3rem;
-            letter-spacing: 3px;
-            color: var(--luxury-gold);
-            text-shadow: 0 0 10px rgba(255,170,0,0.3);
+        .hud-logo {
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            color: var(--cosmic-gold);
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
             font-weight: bold;
         }
 
-        .system-counter {
-            font-size: 0.9rem;
-            color: #8a7361;
+        .hud-logo span {
+            color: var(--starlight-white);
+            font-weight: normal;
         }
 
-        /* INTERACTIVE 2D INTERFACE POPUP MODAL (TRIGGERS VIA 3D CLICKS) */
-        .terminal-modal {
+        .hud-timer {
+            font-size: 1rem;
+            color: #8c7664;
+            letter-spacing: 1px;
+        }
+
+        /* SPACE-MATERIAL DATA MODALS */
+        .cosmic-modal {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            width: 90%;
-            max-width: 550px;
-            background: rgba(15, 12, 10, 0.9);
-            border: 1px solid rgba(255, 170, 0, 0.3);
-            border-radius: 12px;
-            padding: 30px;
+            transform: translate(-50%, -50%) scale(0.85);
+            width: 92%;
+            max-width: 580px;
+            background: rgba(8, 5, 3, 0.92);
+            border: 1px solid rgba(255, 136, 0, 0.35);
+            border-radius: 16px;
+            padding: 35px;
             z-index: 100;
             display: none;
             opacity: 0;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 0 40px rgba(255, 85, 0, 0.15), inset 0 0 20px rgba(0,0,0,0.8);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(25px);
+            box-shadow: 0 0 50px rgba(255, 85, 0, 0.2), inset 0 0 30px rgba(0,0,0,0.9);
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .modal-active {
@@ -104,98 +110,101 @@
             transform: translate(-50%, -50%) scale(1);
         }
 
-        .modal-title {
-            color: var(--luxury-gold);
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+        .modal-header {
+            color: var(--cosmic-gold);
+            font-size: 1.3rem;
+            margin-bottom: 25px;
             letter-spacing: 2px;
-            border-bottom: 1px dashed rgba(255, 170, 0, 0.2);
-            padding-bottom: 8px;
+            border-bottom: 1px dashed rgba(255, 136, 0, 0.2);
+            padding-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .close-token {
+        .close-cross {
             cursor: pointer;
-            color: #7a6555;
+            color: #735f50;
             transition: 0.2s;
         }
 
-        .close-token:hover { color: #fff; }
+        .close-cross:hover { color: var(--starlight-white); }
 
-        /* INPUT CONFIG MATRIX FOR FORM */
-        .data-field {
-            margin-bottom: 18px;
+        /* DATA ENTRY ARRAYS */
+        .form-brick {
+            margin-bottom: 22px;
         }
 
-        .data-field label {
+        .form-brick label {
             display: block;
             font-size: 0.8rem;
-            color: #8c7767;
-            margin-bottom: 6px;
+            color: #9e8571;
+            margin-bottom: 8px;
             letter-spacing: 1px;
         }
 
-        .data-field input, .data-field select, .data-field textarea {
+        .form-brick input, .form-brick select, .form-brick textarea {
             width: 100%;
             background: #000;
-            border: 1px solid rgba(255, 170, 0, 0.2);
-            padding: 12px;
+            border: 1px solid rgba(255, 136, 0, 0.25);
+            padding: 14px;
             color: #fff;
             font-family: inherit;
-            border-radius: 6px;
+            border-radius: 8px;
             outline: none;
+            transition: 0.3s;
         }
 
-        .data-field input:focus, .data-field select:focus {
-            border-color: var(--luxury-gold);
+        .form-brick input:focus, .form-brick select:focus {
+            border-color: var(--cosmic-gold);
+            box-shadow: 0 0 12px rgba(255, 204, 0, 0.2);
         }
 
-        .action-button {
+        .warp-btn {
             width: 100%;
-            background: linear-gradient(135deg, var(--luxury-gold), var(--saffron-fire));
+            background: linear-gradient(135deg, var(--cosmic-gold), var(--nebula-orange));
             color: #000;
             border: none;
-            padding: 15px;
+            padding: 16px;
             font-family: inherit;
             font-weight: bold;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            border-radius: 6px;
+            font-size: 1.05rem;
+            letter-spacing: 3px;
+            border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
         }
 
-        .action-button:hover {
-            box-shadow: 0 0 25px rgba(255, 107, 0, 0.4);
+        .warp-btn:hover {
+            box-shadow: 0 0 30px rgba(255, 85, 0, 0.5);
         }
 
-        /* TOOLTIP NODE SCANNER INDICATOR */
-        #node-scanner-hud {
+        /* RADIAL DYNAMIC SCANNER */
+        #cosmic-scanner-hud {
             position: absolute;
-            background: rgba(5,4,3,0.85);
-            border: 1px solid var(--luxury-gold);
-            padding: 10px 15px;
+            background: rgba(3, 2, 1, 0.9);
+            border: 1px solid var(--cosmic-gold);
+            padding: 12px 18px;
             font-size: 0.85rem;
-            border-radius: 4px;
+            border-radius: 6px;
             pointer-events: none;
             display: none;
             z-index: 50;
             color: #fff;
-            box-shadow: 0 0 15px rgba(255,170,0,0.2);
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.3);
+            letter-spacing: 1px;
         }
 
         /* ========================
-           [VIDEO 1] HIGH-TECH LOADING SCREEN
+           [VIDEO 1] GAME LOADING SEQUENCER
            ======================== */
-        #boot-loader {
+        #cosmic-booter {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #030202;
+            background: #020101;
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -204,399 +213,409 @@
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        .loader-ring-box {
+        .vortex-container {
             position: relative;
-            width: 130px;
-            height: 130px;
+            width: 140px;
+            height: 140px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .spinning-vortex {
+        .spinning-horizon {
             width: 100%;
             height: 100%;
-            border: 2px solid transparent;
-            border-top-color: var(--luxury-gold);
-            border-bottom-color: var(--saffron-fire);
+            border: 3px double transparent;
+            border-top-color: var(--cosmic-gold);
+            border-bottom-color: var(--nebula-orange);
             border-radius: 50%;
-            animation: vectorSpin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            animation: singularitySpin 1.2s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
         }
 
-        .digit-stream {
+        .load-metrics {
             position: absolute;
-            font-size: 1.5rem;
-            color: var(--luxury-gold);
+            font-size: 1.4rem;
+            color: var(--cosmic-gold);
             font-weight: bold;
-            text-shadow: 0 0 10px rgba(255,170,0,0.3);
+            text-shadow: 0 0 12px rgba(255, 204, 0, 0.4);
         }
 
-        .status-tracker {
-            margin-top: 25px;
+        .status-telemetry {
+            margin-top: 30px;
             letter-spacing: 4px;
-            color: #594a3f;
+            color: #614f43;
             font-size: 0.8rem;
         }
 
-        @keyframes vectorSpin { 100% { transform: rotate(360deg); } }
+        @keyframes singularitySpin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="boot-loader">
-        <div class="loader-ring-box">
-            <div class="spinning-vortex"></div>
-            <div class="digit-stream" id="load-value">0%</div>
+    <div id="cosmic-booter">
+        <div class="vortex-container">
+            <div class="spinning-horizon"></div>
+            <div class="load-metrics" id="load-val">0%</div>
         </div>
-        <div class="status-tracker" id="load-string">INITIALIZING QUANTUM CULINARY ENGINE...</div>
+        <div class="status-telemetry" id="load-txt">GENERATING 5D SINGULARITY SPACE DATA...</div>
     </div>
 
-    <div id="viewport-3d"></div>
+    <div id="universe-canvas"></div>
 
-    <div id="node-scanner-hud">SCANNING NODE...</div>
+    <div id="cosmic-scanner-hud">SCANNING CELESTIAL OBJECT...</div>
 
-    <div id="hud-overlay">
-        <div class="hud-header">
-            <div class="system-log">// SATVIK_ROUTE_v2.06 //</div>
-            <div class="system-counter" id="clock-readout">SYS_TIME // 00:00:00</div>
+    <div id="hud-container">
+        <div class="hud-top">
+            <div class="hud-logo">// SATVIK_ROUTE // <span>5D_UNIVERSE</span></div>
+            <div class="hud-timer" id="hud-clock">SYS_CLOCK // 00:00:00</div>
         </div>
-        <div style="font-size: 0.8rem; color: #594a3f; letter-spacing: 1px;">
-            [MOUSE CONTROL DIRECTIONAL ORBIT ACTIVE] <br>
-            CLICK FLOATING NODES TO EXECUTE CORE UTILITIES
+        <div style="font-size: 0.8rem; color: #6e584a; line-height: 1.5; letter-spacing: 1px;">
+            [CELESTIAL NAVIGATION PROTOCOL KEYBOARD/MOUSE ORBIT READY] <br>
+            HOVER & CLICK ORBITING COSMIC SPACE MATERIAL TO TRANSCEND INTERFACES
         </div>
     </div>
 
-    <div class="terminal-modal" id="modal-crew">
-        <div class="modal-title"><span>[DATA_NODE_01] // THE KITCHEN CREW</span> <i class="fas fa-times close-token" onclick="closeAllModals()"></i></div>
-        <p style="color: #c4b39b; line-height: 1.6; font-size: 0.95rem;">
-            <strong>Master Command Cook:</strong> My Father.<br>
-            Purity manifested. An expert specialized in 100% clean, pristine home-cooked meals engineered with strictly <strong>No Onion and No Garlic</strong>. Built specifically for Satsangee pilgrims executing journeys to the Deoghar Satsang Ashram via railway vectors.
+    <div class="cosmic-modal" id="node-blackhole">
+        <div class="modal-header"><span>🌌 [CORE_SINGULARITY] // KITCHEN OVERVIEW</span> <i class="fas fa-times close-cross" onclick="closeAllModals()"></i></div>
+        <p style="color: #cfbfab; line-height: 1.7; font-size: 0.95rem;">
+            Welcome to the event horizon of authentic, clean eating. <br><br>
+            <strong>The Team Structure:</strong> Me, my father, and my uncle. <br>
+            <strong>The Command Core:</strong> My father handles production as the lead artisan. We engineer pure vegetarian meals tailored with <strong>strictly zero onion and zero garlic</strong>. Perfect, healthy, and divine food designed specifically for Satsangee pilgrims trekking to the Deoghar Satsang Ashram via train pipelines.
         </p>
     </div>
 
-    <div class="terminal-modal" id="modal-breakfast">
-        <div class="modal-title"><span>[DATA_NODE_02] // BREAKFAST FREIGHT</span> <i class="fas fa-times close-token" onclick="closeAllModals()"></i></div>
-        <p style="color: #c4b39b; line-height: 1.6; margin-bottom: 15px;">Target Core Pricing: ₹50 - ₹60 per deployable kit.</p>
-        <ul style="padding-left: 20px; color: var(--luxury-gold); display: flex; flex-direction: column; gap: 8px;">
-            <li>Standard Array: Premium Bread + Fresh Cream Butter</li>
-            <li>Extended Utility 1: Homestyle Roasted Poha Module</li>
-            <li>Extended Utility 2: Steaming Suji Upma Configuration</li>
-        </ul>
-        <button class="action-button" style="margin-top:20px;" onclick="selectToForm('Breakfast Protocol Array [Bread+Butter+Poha]')">LOCK BREAKFAST ARRAY IN FORM</button>
+    <div class="cosmic-modal" id="node-helix">
+        <div class="modal-header"><span>🪐 [HELIX_NEBULA] // BREAKFAST FREIGHT SYSTEM</span> <i class="fas fa-times close-cross" onclick="closeAllModals()"></i></div>
+        <p style="color: #cfbfab; line-height: 1.6; margin-bottom: 20px;">Operational Kit Margins: Target Selling Price ₹50 - ₹60.</p>
+        <div style="background: rgba(30,20,15,0.4); padding: 15px; border-radius: 8px; border-left: 3px solid var(--cosmic-gold); display: flex; flex-direction: column; gap: 8px;">
+            <div>🔸 Standard Matrix: Premium Bread + Whipped Table Butter</div>
+            <div>🔸 Custom Expansion Alpha: Golden Roasted Poha Module</div>
+            <div>🔸 Custom Expansion Beta: Savory Vegetable Suji Upma Array</div>
+        </div>
+        <button class="warp-btn" style="margin-top:25px;" onclick="injectPayload('Breakfast Module: Bread-Butter + Poha Array Connected')">LOCK BREAKFAST PROTOCOL IN SYSTEM</button>
     </div>
 
-    <div class="terminal-modal" id="modal-meals">
-        <div class="modal-title"><span>[DATA_NODE_03] // MAIN COURSE FREIGHT</span> <i class="fas fa-times close-token" onclick="closeAllModals()"></i></div>
-        <p style="color: #c4b39b; line-height: 1.6; margin-bottom: 15px;">Target Core Pricing: ₹120 - ₹150 per premium Thali container.</p>
-        <div style="display:flex; flex-direction:column; gap:10px;">
-            <div style="background:#1c1612; padding:12px; border-radius:6px; cursor:pointer; border:1px solid rgba(255,170,0,0.1);" onclick="selectToForm('Lunch/Dinner: Roti Matrix Thali')">
-                <strong style="color:var(--luxury-gold);">[+] ROTI MATRIX CONFIGURATION</strong>
-                <p style="font-size:0.8rem; color:#aaa;">4 Soft Ghee Rotis + 2 Seasonal Day Sabjis + Dal Fry + Dessert + Pure Achar</p>
+    <div class="cosmic-modal" id="node-galaxy">
+        <div class="modal-header"><span>🌀 [SPIRAL_GALAXY] // MAIN CULINARY CARGO</span> <i class="fas fa-times close-cross" onclick="closeAllModals()"></i></div>
+        <p style="color: #cfbfab; line-height: 1.6; margin-bottom: 20px;">Target Consumer Pricing Matrix: ₹120 - ₹150 per high-grade thali unit.</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="background:#17110c; padding:15px; border-radius:8px; cursor:pointer; border:1px solid rgba(255,204,0,0.1);" onclick="injectPayload('Lunch/Dinner: Ghee Roti Multi-Thali Matrix')">
+                <strong style="color:var(--cosmic-gold);">[+] DEPLOY GHEE ROTI PLATFORM</strong>
+                <p style="font-size:0.8rem; color:#b0a090; margin-top:4px;">4 Ghee Rotis + 2 Curated Seasonal Sabjis + Slow-Cooked Dal Fry + Homemade Dessert + Tangy Achar</p>
             </div>
-            <div style="background:#1c1612; padding:12px; border-radius:6px; cursor:pointer; border:1px solid rgba(255,170,0,0.1);" onclick="selectToForm('Lunch/Dinner: Basmati Rice Thali')">
-                <strong style="color:var(--luxury-gold);">[+] BASMATI RICE CONFIGURATION</strong>
-                <p style="font-size:0.8rem; color:#aaa;">Basmati Rice + 2 Seasonal Day Sabjis + Dal Fry + Dessert + Pure Achar</p>
+            <div style="background:#17110c; padding:15px; border-radius:8px; cursor:pointer; border:1px solid rgba(255,204,0,0.1);" onclick="injectPayload('Lunch/Dinner: Premium Basmati Rice Thali Matrix')">
+                <strong style="color:var(--cosmic-gold);">[+] DEPLOY ROYAL BASMATI PLATFORM</strong>
+                <p style="font-size:0.8rem; color:#b0a090; margin-top:4px;">Fluffy Basmati Rice + 2 Curated Seasonal Sabjis + Thick Dal Fry + Homemade Dessert + Tangy Achar</p>
             </div>
-            <div style="background:#1c1612; padding:12px; border-radius:6px; cursor:pointer; border:1px solid rgba(255,170,0,0.1);" onclick="selectToForm('Lunch/Dinner: Healthy Daliya Matrix')">
-                <strong style="color:var(--luxury-gold);">[+] NUTRIENT DALIYA CONFIGURATION</strong>
-                <p style="font-size:0.8rem; color:#aaa;">Wholesome Dressed Veg Daliya + Balanced Curd Blend + Pure Achar</p>
+            <div style="background:#17110c; padding:15px; border-radius:8px; cursor:pointer; border:1px solid rgba(255,204,0,0.1);" onclick="injectPayload('Lunch/Dinner: Balanced Vegetable Daliya Core')">
+                <strong style="color:var(--cosmic-gold);">[+] DEPLOY VEGETABLE DALIYA HEALTH PLATFORM</strong>
+                <p style="font-size:0.8rem; color:#b0a090; margin-top:4px;">Wholesome Dressed Veggie Daliya Mix + Fresh Chilled Dairy Curd + Tangy Achar</p>
             </div>
         </div>
     </div>
 
-    <div class="terminal-modal" id="modal-dispatch">
-        <div class="modal-title"><span>[DATA_NODE_04] // ORDER DISPATCH TERMINAL</span> <i class="fas fa-times close-token" onclick="closeAllModals()"></i></div>
-        <form id="orderForm">
-            <div class="data-field">
-                <label>PILGRIM RECIPIENT IDENTIFIER (NAME)</label>
-                <input type="text" id="nameIn" required placeholder="Type name...">
+    <div class="cosmic-modal" id="node-starcluster">
+        <div class="modal-header"><span>⭐ [STAR_CLUSTER] // BERTH INTERCEPT TERMINAL</span> <i class="fas fa-times close-cross" onclick="closeAllModals()"></i></div>
+        <form id="cosmicForm">
+            <div class="form-brick">
+                <label>PILGRIM INVENTORY IDENTIFIER (CUSTOMER NAME)</label>
+                <input type="text" id="nameField" required placeholder="Input full pilgrim identity...">
             </div>
-            <div class="data-field">
-                <label>INTERCEPT INTERSECTION STATION</label>
-                <select id="stationIn" required>
-                    <option value="">-- RESOLVE TRAIN ROUTE VECTOR --</option>
+            <div class="form-brick">
+                <label>INTERCEPT TRAIN PLATFORM VECTOR</label>
+                <select id="stationField" required>
+                    <option value="">-- RESOLVE DELIVERY VECTOR CODES --</option>
                     <option value="Lanka Station">LANKA RAILWAY STATION (LKA)</option>
                     <option value="Hojai Station">HOJAI RAILWAY STATION (HJI)</option>
                 </select>
             </div>
-            <div class="data-field">
-                <label>TRAIN SCHEDULING SYSTEM (TRAIN NO / COACH / SEAT)</label>
-                <input type="text" id="trainIn" required placeholder="e.g., Train 12345, Coach S2, Berth 35">
+            <div class="form-brick">
+                <label>RAILWAY SCHEDULING COORDINATES (TRAIN NO / COACH / BERTH)</label>
+                <input type="text" id="berthField" required placeholder="e.g., Train 13175, Coach S3, Seat 24">
             </div>
-            <div class="data-field">
-                <label>LOCKED CHARGE MODULE PAYLOAD</label>
-                <input type="text" id="payloadIn" readonly placeholder="Click and lock an item from other nodes..." style="color:var(--luxury-gold); border-color: rgba(255,170,0,0.4);">
+            <div class="form-brick">
+                <label>LOCKED DIETARY QUANTUM CARGO</label>
+                <input type="text" id="payloadField" readonly placeholder="Warp to a Nebula or Galaxy node to lock meal selection..." style="color:var(--cosmic-gold); border-color: rgba(255,204,0,0.4);">
             </div>
-            <div class="data-field">
-                <label>DIETARY OVERRIDE MEMO (CUSTOM EDITIONS / SPECIFIC REQUIREMENTS)</label>
-                <textarea id="customIn" rows="2" placeholder="Input structural alterations if needed..."></textarea>
+            <div class="form-brick">
+                <label>PERSONAL ADDITIONS / DIETARY ADJUSTMENTS</label>
+                <textarea id="customField" rows="2" placeholder="Input custom item request modifications here..."></textarea>
             </div>
-            <div class="data-field">
-                <label>TRANSACTION PROTOCOL MODULE</label>
-                <select id="payIn">
-                    <option value="COD">CASH ESCROW PAYMENT ON ARRIVAL (COD)</option>
-                    <option value="UPI">SECURE UPI INSTANT SCAN CONSOLE (QR GATEWAY)</option>
+            <div class="form-brick">
+                <label>TRANSACTION MODE INFRASTRUCTURE</label>
+                <select id="payField">
+                    <option value="COD">CASH CAPITAL ESCROW HAND-TO-HAND (COD)</option>
+                    <option value="UPI">SECURE UPI INSTANT SCAN LINK GATEWAY</option>
                 </select>
             </div>
-            <button type="submit" class="action-button">INJECT COMPULSORY ORDER DISPATCH</button>
+            <button type="submit" class="warp-btn">DISPATCH LOGISTICS COMMAND BLOCK</button>
         </form>
     </div>
 
-
     <script>
-        // BOOT SYSTEM SEQUENCER
-        let bootProgress = 0;
-        const valueDisplay = document.getElementById('load-value');
-        const trackerText = document.getElementById('load-string');
-        const bootStrings = ["LOADING GRAPHICS INFRASTRUCTURE...", "COMPILING 3D CORE TEXT NODES...", "LOCKING RAILWAY GRID SYSTEMS...", "BOOT SEQUENCING RECTIFIED"];
+        // BOOT LOADING LOOPER (0-100% TELEMETRY SIMULATION)
+        let loadPercent = 0;
+        const dDisplay = document.getElementById('load-val');
+        const tDisplay = document.getElementById('load-txt');
+        const telemetryLogs = ["MATERIALIZING HOJAI / LANKA INTERSECT PIPES...", "BUILDING HELIX NEBULA DUST PLANES...", "IGNITING SPIRAL GALAXY THALI CHANNELS...", "5D MATRIX CODES RESOLVED SUCCESSFULLY"];
 
-        let systemBoot = setInterval(() => {
-            bootProgress += Math.floor(Math.random() * 5) + 2;
-            if(bootProgress >= 100) {
-                bootProgress = 100;
-                clearInterval(systemBoot);
+        let bootSequence = setInterval(() => {
+            loadPercent += Math.floor(Math.random() * 4) + 2;
+            if(loadPercent >= 100) {
+                loadPercent = 100;
+                clearInterval(bootSequence);
                 setTimeout(() => {
-                    document.getElementById('boot-loader').style.opacity = '0';
-                    document.getElementById('boot-loader').style.transform = 'scale(0.9)';
-                    setTimeout(() => document.getElementById('boot-loader').style.display = 'none', 800);
+                    document.getElementById('cosmic-booter').style.opacity = '0';
+                    document.getElementById('cosmic-booter').style.transform = 'scale(1.1) translateY(-20px)';
+                    setTimeout(() => document.getElementById('cosmic-booter').style.display = 'none', 800);
                 }, 400);
             }
-            valueDisplay.innerText = bootProgress + "%";
-            trackerText.innerText = bootStrings[Math.floor(bootProgress / 28)] || bootStrings[3];
-        }, 500);
+            dDisplay.innerText = loadPercent + "%";
+            tDisplay.innerText = telemetryLogs[Math.floor(loadPercent / 28)] || telemetryLogs[3];
+        }, 80);
 
-        // REALTIME HUD TIMER 
+        // SYNC REALTIME HUD TIME ARRAY
         setInterval(() => {
-            const timeData = new Date();
-            document.getElementById('clock-readout').innerText = `SYS_TIME // ${timeData.toTimeString().split(' ')[0]}`;
+            const dateInstance = new Date();
+            document.getElementById('hud-clock').innerText = `SYS_CLOCK // ${dateInstance.toTimeString().split(' ')[0]}`;
         }, 1000);
 
-        // 3D NODE DATA PACK MATRICES
-        const nodeDefinitions = [
-            { id: 'crew', title: 'LAUNCH: [ABOUT_CREW]', color: 0xffaa00, x: -35, y: 15, z: 0 },
-            { id: 'breakfast', title: 'LOAD: [BREAKFAST_PACKS]', color: 0xffdd44, x: 35, y: 20, z: -10 },
-            { id: 'meals', title: 'LOAD: [LUNCH_&_DINNER]', color: 0xff5500, x: -25, y: -20, z: 15 },
-            { id: 'dispatch', title: 'EXECUTE: [ORDER_TERMINAL]', color: 0xffaa00, x: 25, y: -15, z: 5 },
-            { id: 'core', title: '// SATVIK_ROUTE_CORE //', color: 0xffffff, x: 0, y: 0, z: -5, isCore: true }
-        ];
-
-        // INITIALIZE THREE.JS 3D SYSTEM ARCHITECTURE
-        const viewContainer = document.getElementById('viewport-3d');
+        // INITIATE THREE.JS SPACE ENGINE DATA ARCHITECTURE
+        const viewport = document.getElementById('universe-canvas');
         const scene = new THREE.Scene();
         
-        // Setup Perspective Camera
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 90;
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 110);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        viewContainer.appendChild(renderer.domElement);
+        viewport.appendChild(renderer.domElement);
 
-        // GENERATE COSMIC ENVIRONMENT PARTICLES (BACKGROUND MATRIX SYSTEM)
-        const spaceParticlesCount = 1500;
-        const spaceGeometry = new THREE.BufferGeometry();
-        const spacePositions = new Float32Array(spaceParticlesCount * 3);
-        const spaceColors = new Float32Array(spaceParticlesCount * 3);
+        // CREATE 3D SPACE OBJECT STRUCTURE MATRICES
+        const masterSpaceGroup = new THREE.Group();
+        scene.add(masterSpaceGroup);
 
-        const goldTint = new THREE.Color('#ffaa00');
-        const orangeTint = new THREE.Color('#ff3300');
-
-        for(let i=0; i < spaceParticlesCount; i++) {
-            spacePositions[i*3] = (Math.random() - 0.5) * 250;
-            spacePositions[i*3+1] = (Math.random() - 0.5) * 250;
-            spacePositions[i*3+2] = (Math.random() - 0.5) * 250;
-
-            const mixedTint = goldTint.clone().lerp(orangeTint, Math.random());
-            spaceColors[i*3] = mixedTint.r;
-            spaceColors[i*3+1] = mixedTint.g;
-            spaceColors[i*3+2] = mixedTint.b;
-        }
-        spaceGeometry.setAttribute('position', new THREE.BufferAttribute(spacePositions, 3));
-        spaceGeometry.setAttribute('color', new THREE.BufferAttribute(spaceColors, 3));
-        
-        const spaceMaterial = new THREE.PointsMaterial({
-            size: 0.5,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.4,
-            blending: THREE.AdditiveBlending
-        });
-        const spaceNetworkMesh = new THREE.Points(spaceGeometry, spaceMaterial);
-        scene.add(spaceNetworkMesh);
-
-        // CREATE TRUE DYNAMIC FLOATING INTERACTIVE GRAPHIC NODES
-        const nodesGroup = new THREE.Group();
-        scene.add(nodesGroup);
-
-        const nodeMeshes = [];
-
-        // Function to create a Canvas texture containing the actual text dynamically floating
-        function createTextTexture(text, colorStr) {
-            const canvasElement = document.createElement('canvas');
-            const ctx2d = canvasElement.getContext('2d');
-            canvasElement.width = 512;
-            canvasElement.height = 128;
-
-            // Translucent glowing tech background box
-            ctx2d.fillStyle = 'rgba(15, 10, 5, 0.7)';
-            ctx2d.fillRect(0, 0, 512, 128);
-            ctx2d.strokeStyle = colorStr;
-            ctx2d.lineWidth = 4;
-            ctx2d.strokeRect(0, 0, 512, 128);
-
-            // Draw text values
-            ctx2d.fillStyle = '#fff1d0';
-            ctx2d.font = 'bold 32px "Share Tech Mono", monospace';
-            ctx2d.textAlign = 'center';
-            ctx2d.textBaseline = 'middle';
-            ctx2d.shadowColor = colorStr;
-            ctx2d.shadowBlur = 15;
-            ctx2d.fillText(text, 256, 64);
-
-            const texture = new THREE.CanvasTexture(canvasElement);
-            return texture;
+        // Helper function to build complex star particle systems
+        function makeSpaceMaterial(count, colorHex, spread) {
+            const geo = new THREE.BufferGeometry();
+            const pos = new Float32Array(count * 3);
+            for(let i=0; i<count*3; i++) pos[i] = (Math.random() - 0.5) * spread;
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            const mat = new THREE.PointsMaterial({ size: 0.4, color: colorHex, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
+            return new THREE.Points(geo, mat);
         }
 
-        // Deploy node entities into 3D structural matrix positions
-        nodeDefinitions.forEach(def => {
-            const hexColorStr = '#' + def.color.toString(16).padStart(6, '0');
-            const texture = createTextTexture(def.title, hexColorStr);
-            
-            const planeGeo = new THREE.PlaneGeometry(28, 7);
-            const planeMat = new THREE.MeshBasicMaterial({
-                map: texture,
-                transparent: true,
-                side: THREE.DoubleSide,
-                blending: THREE.AdditiveBlending
-            });
+        // Add 2000 global background star matrices
+        const universeStars = makeSpaceMaterial(2000, 0xffffff, 300);
+        scene.add(universeStars);
 
-            const nodeMesh = new THREE.Mesh(planeGeo, planeMat);
-            nodeMesh.position.set(def.x, def.y, def.z);
-            nodeMesh.userData = { id: def.id, initialY: def.y, speedOffset: Math.random() * 5 };
-            
-            nodesGroup.add(nodeMesh);
-            nodeMeshes.push(nodeMesh);
-        });
+        // ============================================
+        // 3D SPACE CORES (BLACK HOLE, NEBULA, GALAXY, STARS)
+        // ============================================
 
-        // CONNECTIVITY VECTOR INTERCONNECTED GRAPH LINKS (DRAWING LINES BETWEEN THE FLOATING WORDS)
-        const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0.25 });
-        const coreNode = nodeDefinitions.find(n => n.isCore);
-        
-        nodeDefinitions.forEach(def => {
-            if(!def.isCore) {
-                const lineGeo = new THREE.BufferGeometry().setFromPoints([
-                    new THREE.Vector3(coreNode.x, coreNode.y, coreNode.z),
-                    new THREE.Vector3(def.x, def.y, def.z)
+        // 1. THE CORE BLACK HOLE (About Crew Node)
+        const bhGroup = new THREE.Group();
+        bhGroup.position.set(0, 0, 0);
+        masterSpaceGroup.add(bhGroup);
+
+        const singularityMesh = new THREE.Mesh(
+            new THREE.SphereGeometry(6, 32, 32),
+            new THREE.MeshBasicMaterial({ color: 0x000000 })
+        );
+        bhGroup.add(singularityMesh);
+
+        // Accretion Disk Ring (Swirling Material)
+        const diskGeo = new THREE.RingGeometry(8, 16, 64);
+        const diskMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, side: THREE.DoubleSide, transparent: true, opacity: 0.7, wireframe: true });
+        const accretionDisk = new THREE.Mesh(diskGeo, diskMat);
+        accretionDisk.rotation.x = Math.PI / 2.5;
+        bhGroup.add(accretionDisk);
+        singularityMesh.userData = { id: 'blackhole', label: 'WARP CORE: [BLACK_HOLE] // ABOUT BRAND' };
+
+        // 2. THE HELIX NEBULA (Breakfast Node Cluster)
+        const nebulaGroup = new THREE.Group();
+        nebulaGroup.position.set(-45, 25, -10);
+        masterSpaceGroup.add(nebulaGroup);
+
+        const helixParticles = 800;
+        const helixGeo = new THREE.BufferGeometry();
+        const helixPos = new Float32Array(helixParticles * 3);
+        for(let i=0; i<helixParticles; i++) {
+            const angle = (i / helixParticles) * Math.PI * 2 * 3;
+            const r = 8 + Math.random() * 4;
+            helixPos[i*3] = Math.cos(angle) * r;
+            helixPos[i*3+1] = Math.sin(angle) * r;
+            helixPos[i*3+2] = (Math.random() - 0.5) * 6;
+        }
+        helixGeo.setAttribute('position', new THREE.BufferAttribute(helixPos, 3));
+        const helixMat = new THREE.PointsMaterial({ size: 0.6, color: 0xff4400, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
+        const helixMesh = new THREE.Points(helixGeo, helixMat);
+        nebulaGroup.add(helixMesh);
+        helixMesh.userData = { id: 'helix', label: 'WARP INTERFACE: [HELIX_NEBULA] // BREAKFAST CONFIG' };
+
+        // 3. THE SPIRAL GALAXY (Lunch & Dinner Node Cluster)
+        const galaxyGroup = new THREE.Group();
+        galaxyGroup.position.set(45, -20, 10);
+        masterSpaceGroup.add(galaxyGroup);
+
+        const galParticles = 1200;
+        const galGeo = new THREE.BufferGeometry();
+        const galPos = new Float32Array(galParticles * 3);
+        for(let i=0; i<galParticles; i++) {
+            const arm = i % 2 === 0 ? 0 : Math.PI;
+            const distance = Math.random() * 14;
+            const angle = distance * 0.6 + arm;
+            galPos[i*3] = Math.cos(angle) * distance + (Math.random() - 0.5) * 2;
+            galPos[i*3+1] = Math.sin(angle) * distance + (Math.random() - 0.5) * 2;
+            galPos[i*3+2] = (Math.random() - 0.5) * 3;
+        }
+        galGeo.setAttribute('position', new THREE.BufferAttribute(galPos, 3));
+        const galMat = new THREE.PointsMaterial({ size: 0.5, color: 0xffaa00, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
+        const galaxyMesh = new THREE.Points(galGeo, galMat);
+        galaxyGroup.add(galaxyMesh);
+        galaxyMesh.userData = { id: 'galaxy', label: 'WARP INTERFACE: [SPIRAL_GALAXY] // MAIN COURSE FREIGHT' };
+
+        // 4. THE BRIGHT STAR CLUSTER (Order Dispatch Terminal Node)
+        const starClusterGroup = new THREE.Group();
+        starClusterGroup.position.set(-35, -25, 0);
+        masterSpaceGroup.add(starClusterGroup);
+
+        const clusterGeo = new THREE.SphereGeometry(6, 16, 16);
+        const clusterMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.25 });
+        const clusterCore = new THREE.Mesh(clusterGeo, clusterMat);
+        starClusterGroup.add(clusterCore);
+
+        const denseStars = makeSpaceMaterial(300, 0xffffff, 12);
+        starClusterGroup.add(denseStars);
+        clusterCore.userData = { id: 'starcluster', label: 'WARP RUNNER: [STAR_CLUSTER] // DISPATCH TERMINAL' };
+
+        // Consolidated array for raycasting collisions
+        const targetsArray = [singularityMesh, helixMesh, galaxyMesh, clusterCore];
+
+        // 5D MATRICES CONNECTIVE ENERGY VECTOR RAYS (INTERSECTING CHANNELS)
+        const vectorMaterial = new THREE.LineBasicMaterial({ color: 0xff5500, transparent: true, opacity: 0.15 });
+        targetsArray.forEach(target => {
+            if(target !== singularityMesh) {
+                const worldPos = new THREE.Vector3();
+                target.getWorldPosition(worldPos);
+                const vectorGeo = new THREE.BufferGeometry().setFromPoints([
+                    new THREE.Vector3(0,0,0),
+                    worldPos
                 ]);
-                const netLine = new THREE.Line(lineGeo, lineMaterial);
-                scene.add(netLine);
+                const energyRay = new THREE.Line(vectorGeo, vectorMaterial);
+                scene.add(energyRay);
             }
         });
 
-        // INTERACTIVE RAYCASTING MOUSE TRAVERSAL LOGIC (DETERMINES WHAT NODE IS BEING HOVERED/CLICKED)
+        // RAYCASTING CONTROL INPUT PIPELINE
         const raycaster = new THREE.Raycaster();
-        const mouseCoordinates = new THREE.Vector2();
-        let mouseX = 0, mouseY = 0;
+        const cursorVector = new THREE.Vector2();
+        let driftX = 0, driftY = 0;
 
-        window.addEventListener('mousemove', (event) => {
-            // Update mouse variables for structural orbit drift
-            mouseX = (event.clientX - window.innerWidth / 2) * 0.05;
-            mouseY = (event.clientY - window.innerHeight / 2) * 0.05;
+        window.addEventListener('mousemove', (e) => {
+            driftX = (e.clientX - window.innerWidth / 2) * 0.04;
+            driftY = (e.clientY - window.innerHeight / 2) * 0.04;
 
-            // Normalize coordinate data arrays for raycaster targeting map
-            mouseCoordinates.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseCoordinates.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            cursorVector.x = (e.clientX / window.innerWidth) * 2 - 1;
+            cursorVector.y = -(e.clientY / window.innerHeight) * 2 + 1;
         });
 
-        // CLICK LISTENER VECTOR INJECTION ENGINE
+        // MOUSE RAYCAST CLICK DISPATCHER
         window.addEventListener('click', () => {
-            raycaster.setFromCamera(mouseCoordinates, camera);
-            const intersections = raycaster.intersectObjects(nodeMeshes);
-
-            if(intersections.length > 0) {
-                const triggeredNodeId = intersections[0].object.userData.id;
-                openModalEngine(triggeredNodeId);
+            raycaster.setFromCamera(cursorVector, camera);
+            const hits = raycaster.intersectObjects(targetsArray);
+            if(hits.length > 0) {
+                const targetID = hits[0].object.userData.id;
+                triggerSpaceWarp(targetID);
             }
         });
 
-        // 2D DISPLAY MODAL INTERPOLATION LOGIC
-        function openModalEngine(id) {
+        // TRANS-DIMENSIONAL POPUP UI MODAL CONTROLLERS
+        function triggerSpaceWarp(id) {
             closeAllModals();
-            let targetModal = null;
-            if(id === 'crew') targetModal = document.getElementById('modal-crew');
-            if(id === 'breakfast') targetModal = document.getElementById('modal-breakfast');
-            if(id === 'meals') targetModal = document.getElementById('modal-meals');
-            if(id === 'dispatch') targetModal = document.getElementById('modal-dispatch');
-            if(id === 'core') targetModal = document.getElementById('modal-crew');
+            let activeModal = null;
+            if(id === 'blackhole') activeModal = document.getElementById('node-blackhole');
+            if(id === 'helix') activeModal = document.getElementById('node-helix');
+            if(id === 'galaxy') activeModal = document.getElementById('node-galaxy');
+            if(id === 'starcluster') activeModal = document.getElementById('node-starcluster');
 
-            if(targetModal) targetModal.classList.add('modal-active');
+            if(activeModal) activeModal.classList.add('modal-active');
         }
 
         function closeAllModals() {
-            document.querySelectorAll('.terminal-modal').forEach(m => m.classList.remove('modal-active'));
+            document.querySelectorAll('.cosmic-modal').forEach(m => m.classList.remove('modal-active'));
         }
 
-        function selectToForm(payloadValue) {
-            document.getElementById('payloadIn').value = payloadValue;
+        function injectPayload(textVal) {
+            document.getElementById('payloadField').value = textVal;
             closeAllModals();
-            openModalEngine('dispatch'); // Pivot focus context back to order registration node automatically
+            triggerSpaceWarp('starcluster'); // Warp client automatically to order data console terminal
         }
 
         // ============================================
-        // FRAME SYSTEM RENDERING ANIMATION REAL-TIME RUN LOOP
+        // GRAPHICS FRAME RENDERING ARCHITECTURE (CORE RUN LOOP)
         // ============================================
-        const clockTimer = new THREE.Clock();
+        const runtimeClock = new THREE.Clock();
 
-        function continuousRenderLoop() {
-            requestAnimationFrame(continuousRenderLoop);
-            const totalElapsedTime = clockTimer.getElapsedTime();
+        function renderUniverseLoop() {
+            requestAnimationFrame(renderUniverseLoop);
+            const clockTicks = runtimeClock.getElapsedTime();
 
-            // Passive particle background cosmic rotation alignment
-            spaceNetworkMesh.rotation.y = totalElapsedTime * 0.02;
+            // Passive deep-space rotation
+            universeStars.rotation.y = clockTicks * 0.01;
 
-            // MAKE EACH TEXT WORD FLOAT AND MOVE INDEPENDENTLY (WAVE SINE FLUID ACTION)
-            nodeMeshes.forEach(mesh => {
-                const individualOffset = totalElapsedTime * 1.5 + mesh.userData.speedOffset;
-                mesh.position.y = mesh.userData.initialY + Math.sin(individualOffset) * 2.5;
-                mesh.position.x += Math.cos(individualOffset) * 0.02;
-            });
+            // 1. Spin Black Hole accretion rings
+            accretionDisk.rotation.z = clockTicks * 0.8;
+            bhGroup.rotation.y = clockTicks * 0.1;
 
-            // COMPULSORY INTERACTIVE PARALLAX: Dynamic matrix grid orbital shifts corresponding to mouse positioning coordinates
-            nodesGroup.rotation.y += (mouseX * 0.01 - nodesGroup.rotation.y) * 0.08;
-            nodesGroup.rotation.x += (mouseY * 0.01 - nodesGroup.rotation.x) * 0.08;
+            // 2. Kinetic swirling of Nebula gas particles
+            helixMesh.rotation.z = -clockTicks * 0.2;
+            nebulaGroup.position.y = 25 + Math.sin(clockTicks * 1.2) * 2;
 
-            // RAYCAST HOVER SCANNER DISPLAY MANAGEMENT
-            raycaster.setFromCamera(mouseCoordinates, camera);
-            const hoverIntersections = raycaster.intersectObjects(nodeMeshes);
-            const scannerHud = document.getElementById('node-scanner-hud');
+            // 3. Mathematical spiral velocity updates for Galaxy material
+            galaxyMesh.rotation.z = clockTicks * 0.15;
+            galaxyGroup.position.y = -20 + Math.cos(clockTicks * 0.8) * 2;
 
-            if(hoverIntersections.length > 0) {
+            // 4. Floating star cluster orbit vibration loops
+            starClusterGroup.rotation.y = clockTicks * 0.2;
+            starClusterGroup.position.x = -35 + Math.sin(clockTicks * 0.9) * 1.5;
+
+            // COMPULSORY 5D MOUSE PARALLAX INTERPOLATION (Moves entire universe relative to mouse position)
+            masterSpaceGroup.rotation.y += (driftX * 0.012 - masterSpaceGroup.rotation.y) * 0.07;
+            masterSpaceGroup.rotation.x += (driftY * 0.012 - masterSpaceGroup.rotation.x) * 0.07;
+
+            // RAYCAST INTERACTION CHECKER ON REALTIME POINTER VECTORS
+            raycaster.setFromCamera(cursorVector, camera);
+            const intersections = raycaster.intersectObjects(targetsArray);
+            const tooltipHud = document.getElementById('cosmic-scanner-hud');
+
+            if(intersections.length > 0) {
                 document.body.style.cursor = 'pointer';
-                scannerHud.style.display = 'block';
-                scannerHud.style.left = (mouseCoordinates.x + 1) * window.innerWidth / 2 + 15 + 'px';
-                scannerHud.style.top = -(mouseCoordinates.y - 1) * window.innerHeight / 2 + 15 + 'px';
-                scannerHud.innerText = `TARGETED FREIGHT LINK // CLICK SYSTEM CORE`;
+                tooltipHud.style.display = 'block';
+                tooltipHud.style.left = (cursorVector.x + 1) * window.innerWidth / 2 + 20 + 'px';
+                tooltipHud.style.top = -(cursorVector.y - 1) * window.innerHeight / 2 + 20 + 'px';
+                tooltipHud.innerText = intersections[0].object.userData.label;
             } else {
                 document.body.style.cursor = 'default';
-                scannerHud.style.display = 'none';
+                tooltipHud.style.display = 'none';
             }
 
             renderer.render(scene, camera);
         }
-        continuousRenderLoop();
+        renderUniverseLoop();
 
-        // RUN RESPONSIVE DISPLAY VIEWPORT RE-SHAPER MATRIX
+        // RUN SCREEN BOUNDARY RESPONSIVE RESIZER ENGINE
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // FORM SUBMISSION PIPELINE INJECTION
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
+        // TELEMETRY ORDER PIPELINE DISPATCH LOGIC
+        document.getElementById('cosmicForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert("SUCCESS // ORDER FREIGHT SEQUENCE LOGGED:\nData transmission dispatched safely down the railway matrix channel.");
+            alert("SUCCESS // LOGISTICS SEQUENCE SYNCHRONIZED:\n5D deployment array injected safely down the railway channels.");
             closeAllModals();
         });
     </script>
